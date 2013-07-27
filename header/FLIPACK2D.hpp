@@ -9,9 +9,8 @@
 #ifndef __FLIPACK2D_hpp__
 #define __FLIPACK2D_hpp__
 
-#include"H2_2D_tree.hpp"
-#include"iostream"
-#include"Eigen/Dense"
+#include"BBFMM2D.hpp"
+#include"environment.hpp"
 
 using namespace Eigen;
 using namespace std;

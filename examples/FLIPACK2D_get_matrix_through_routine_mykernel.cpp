@@ -6,15 +6,10 @@
 //
 //	FLIPACK2D_get_matrix_through_routine_standard_kernel.cpp
 //
-#include"iostream"
-#include"ctime"
-#include"cmath"
-#include"Eigen/Dense"
+#include"environment.hpp"
 #include"FLIPACK2D.hpp"
-#include"H2_2D_tree.hpp"
-#include"kernel_types.hpp"
 #include"read_X_R_measurements.hpp"
-#include"read_location_H.hpp"
+
 
 
 using namespace std;
