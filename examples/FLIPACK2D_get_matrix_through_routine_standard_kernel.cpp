@@ -16,8 +16,6 @@
 #include"read_X_R_measurements.hpp"
 #include"read_location_H.hpp"
 
-//#include"BBFMM2D/H2_2D"
-
 
 using namespace std;
 using namespace Eigen;

@@ -12,7 +12,6 @@
 #include"H2_2D_tree.hpp"
 #include"iostream"
 #include"Eigen/Dense"
-//#include"BBFMM2D/H2_2D"
 
 using namespace Eigen;
 using namespace std;
