@@ -45,8 +45,10 @@ void get_nchebnode(unsigned short& nchebnode){
 
 class mykernel: public kernel_base {
 public:
-    virtual double kernel_func(double R_square){
-        //define your own kernel here
+    //point r0 = (r0_x, r0_y); point r1 = (r1_x, r1_y)
+    virtual double kernel_func(double r0_x, double r0_y, double r1_x, double r1_y){
+        //implement your own kernel here
+        double R_square	=	(r0_x-r1_x)*(r0_x-r1_x) + (r0_y-r1_y)*(r0_y-r1_y);
         return 1.0 + R_square;
     }
 };
