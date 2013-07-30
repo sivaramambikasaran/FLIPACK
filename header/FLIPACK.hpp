@@ -4,10 +4,10 @@
 //
 //	<author>Sivaram Ambikasaran</author>
 //	
-//	FLIPACK2D.hpp
+//	FLIPACK.hpp
 //
-#ifndef __FLIPACK2D_hpp__
-#define __FLIPACK2D_hpp__
+#ifndef __FLIPACK_hpp__
+#define __FLIPACK_hpp__
 
 #include"BBFMM2D.hpp"
 #include"environment.hpp"
@@ -17,9 +17,9 @@ using namespace std;
 
 
 template <typename T>
-class FLIPACK2D{
+class FLIPACK{
 public:
-    FLIPACK2D(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree*Atree);
+    FLIPACK(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree*Atree);
     void get_QH_transpose();
     void get_HQH_transpose();
     void get_Psi();
@@ -63,7 +63,7 @@ private:
 
 
 template <typename T>
-FLIPACK2D<T>::FLIPACK2D(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree *Atree){
+FLIPACK<T>::FLIPACK(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree *Atree){
     this->location          =   location;
     this->H_transpose       =   H_transpose;
     this->X                 =   X;
@@ -94,7 +94,7 @@ FLIPACK2D<T>::FLIPACK2D(vector<Point>& location, MatrixXd& H_transpose, MatrixXd
 
 
 template <typename T>
-void FLIPACK2D<T>::get_QH_transpose(){
+void FLIPACK<T>::get_QH_transpose(){
     if (computed_QH_transpose==false) {
         cout << endl << "Performing FMM to obtain QH_transpose..." << endl;
         QH_transpose            =   MatrixXd(N,m);
@@ -107,7 +107,7 @@ void FLIPACK2D<T>::get_QH_transpose(){
 
 
 template <typename T>
-void FLIPACK2D<T>::get_HQH_transpose(){
+void FLIPACK<T>::get_HQH_transpose(){
     if (computed_HQH_transpose==false) {
         get_QH_transpose();
         HQH_transpose   =   H_transpose.transpose()*QH_transpose;
@@ -117,7 +117,7 @@ void FLIPACK2D<T>::get_HQH_transpose(){
 }
 
 template <typename T>
-void FLIPACK2D<T>::get_Psi(){
+void FLIPACK<T>::get_Psi(){
     if (computed_Psi==false) {
         get_HQH_transpose();
         Psi =   HQH_transpose + R;
@@ -127,7 +127,7 @@ void FLIPACK2D<T>::get_Psi(){
 }
 
 template <typename T>
-void FLIPACK2D<T>::get_Phi(){
+void FLIPACK<T>::get_Phi(){
     if (computed_Phi==false) {
         Phi =   H_transpose.transpose()*X;
         computed_Phi            =   true;
@@ -136,7 +136,7 @@ void FLIPACK2D<T>::get_Phi(){
 }
 
 template <typename T>
-void FLIPACK2D<T>::get_Main_Matrix(){
+void FLIPACK<T>::get_Main_Matrix(){
     if (computed_Main_Matrix==false) {
         get_Psi();
         Main_Matrix.block(0,0,m,m)  =   Psi;
@@ -151,7 +151,7 @@ void FLIPACK2D<T>::get_Main_Matrix(){
 }
 
 template <typename T>
-void FLIPACK2D<T>::get_Intermediate_Solution(){
+void FLIPACK<T>::get_Intermediate_Solution(){
     if (computed_Intermediate_Solution==false) {
         get_Main_Matrix();
         MatrixXd rhs                        =   MatrixXd::Zero(m+p,nmeasurementsets);
@@ -163,7 +163,7 @@ void FLIPACK2D<T>::get_Intermediate_Solution(){
 }
 
 template <typename T>
-void FLIPACK2D<T>::get_Xi(){
+void FLIPACK<T>::get_Xi(){
     if (computed_Xi==false) {
         get_Intermediate_Solution();
         Xi              =   intermediate_solution.block(0,0,m,nmeasurementsets);
@@ -173,7 +173,7 @@ void FLIPACK2D<T>::get_Xi(){
 }
 
 template <typename T>
-void FLIPACK2D<T>::get_Beta(){
+void FLIPACK<T>::get_Beta(){
     if (computed_Xi==false) {
         get_Intermediate_Solution();
         Beta            =   intermediate_solution.block(m,0,p,nmeasurementsets);
@@ -183,7 +183,7 @@ void FLIPACK2D<T>::get_Beta(){
 }
 
 template <typename T>
-void FLIPACK2D<T>::get_Solution(){
+void FLIPACK<T>::get_Solution(){
     if (computed_Solution==false) {
         get_QH_transpose();
         get_Beta();
@@ -196,4 +196,4 @@ void FLIPACK2D<T>::get_Solution(){
 
 
 
-#endif //__FLIPACK2D_hpp__
+#endif //__FLIPACK_hpp__

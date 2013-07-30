@@ -4,15 +4,59 @@
 //
 //	<author>Sivaram Ambikasaran, Ruoxi Wang</author>
 //
-//	FLIPACK2D_input_from_file_standard_kernel.cpp
+//	FLIPACK_get_matrix_through_routine_standard_kernel.cpp
 //
 #include"environment.hpp"
-#include"FLIPACK2D.hpp"
+#include"FLIPACK.hpp"
 #include"read_X_R_measurements.hpp"
+
 
 
 using namespace std;
 using namespace Eigen;
+
+//  Function gets the location of the unknowns from the user;
+void get_Location(unsigned long& N, vector<Point>& location){
+	N           =	5000;
+	VectorXd tmp1	=	VectorXd::Random(N);
+	VectorXd tmp2	=	VectorXd::Random(N);
+    for (unsigned long i = 0; i < N; i++) {
+        Point new_Point;
+        new_Point.x =   tmp1[i];
+        new_Point.y =   tmp2[i];
+        location.push_back(new_Point);
+    }
+}
+
+//  Measurement operator from the user;
+void get_Measurement_operator(const unsigned long N, unsigned& m, unsigned& nmeasurementsets, MatrixXd& Htranspose, MatrixXd& measurements, MatrixXd& R){
+	m               =	10;                                     //	Number of measurements;
+    nmeasurementsets=   5;                                      //  Number of measurement sets;
+	Htranspose      =	MatrixXd::Random(N,m);                  //  Transpose of the measurement operator;
+    measurements    =   MatrixXd::Random(m,nmeasurementsets);   //  Set of measurements;
+    R               =   MatrixXd::Identity(m,m);                //  Covariance of the measurements;
+}
+
+//  Get the structure of the mean;
+void get_X(unsigned const N, unsigned short& p, MatrixXd& X){
+    p   =   6;
+    X   =   MatrixXd::Random(N,p);
+}
+
+//  Get the number of Chebyshev nodes in one direction;
+void get_nchebnode(unsigned short& nchebnode){
+    nchebnode    =   8;
+}
+
+
+class mykernel: public kernel_base {
+public:
+    virtual double kernel_func(Point r0, Point r1){
+        //implement your own kernel here
+        double R_square	=	(r0.x-r1.x)*(r0.x-r1.x) + (r0.y-r1.y)*(r0.y-r1.y);
+        return 1.0 + R_square;
+    }
+};
 
 int main(){
     /**********************************************************/
@@ -25,41 +69,45 @@ int main(){
 
     clock_t start   =   clock();
 
-    /*******    Getting location and Htranspose   *******/
+    /*******    Getting the configuration of the grid   *******/
 
 	unsigned long N;            //  Number of unknowns;
     vector<Point> location;       //  Location of the unknowns;
+    
+    get_Location(N,location);
+    
+    
+    cout << endl << "Number of unknowns is: " << N << endl;
+    
+    /** Getting measurement related information measurements **/
+    
     unsigned m;                 //  Number of measurements;
-    MatrixXd Htranspose;        //  Transpose of the measurement operator;
-    
-    string filename_location_Htranpose = "./../input/test_location_H.txt";
-    
-    read_Location_and_Measurement_operator (filename_location_Htranpose.c_str(),  N,location,  m, Htranspose);
-
-    
-    cout << endl << "Number of unknowns is: "     << N << endl;
-    cout << endl << "Number of measurements is: " << m << endl;
-
-    /*******     Getting X, R and measurements     *******/
-    
     unsigned nmeasurementsets;  //  Number of measurement sets;
+    MatrixXd Htranspose;        //  Transpose of the measurement operator;
     MatrixXd measurements;      //  Actual measurements;
     MatrixXd R;                 //  Covariance matrix;
+    
+    get_Measurement_operator(N, m, nmeasurementsets, Htranspose, measurements, R);
+    
+    cout << endl << "Number of measurements is: " << m << endl;
+    cout << endl << "Number of sets of measurements is: " << nmeasurementsets << endl;
+
+    /***************    Getting the structure   ***************/
+    
     MatrixXd X;                 //  Structure of the mean;
     unsigned short p;           //  Number of terms in the structure;
     
-    string filename_X_R_measurements = "./../input/test_X_R_measurements.txt";
-    
-    read_X_R_measurements(filename_X_R_measurements.c_str(),N,p,m,nmeasurementsets,X,R,measurements);
-    
-    cout << endl << "Number of sets of measurements is: " << nmeasurementsets << endl;
-    cout << endl << "Number of terms in the structure is: " << p << endl;    
-    
+    get_X(N, p, X);
+
+    cout << endl << "Number of terms in the structure is: " << p << endl;
+
     /***  Getting the number of Chebyshev nodes for the fmm  ***/
     
-    unsigned short nchebnode = 8;   //  Number of Chebyshev nodes( >= 3)
-                                    //  per dimension;
+    unsigned short nchebnode;   //  Number of Chebyshev nodes( >= 3)
+                                //  per dimension;
     
+    get_nchebnode(nchebnode);
+
     cout << endl << "Number of Chebyshev nodes along one direction is: " << nchebnode << endl;
 
     clock_t end   =   clock();
@@ -87,17 +135,17 @@ int main(){
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
     
-    FLIPACK2D<kernel_Gaussian> A(location, Htranspose, X, measurements, R, nchebnode, &Atree);
+    FLIPACK<mykernel> A(location, Htranspose, X, measurements, R, nchebnode, &Atree);
     
     A.get_Solution();
-        
+    
     end   =   clock();
     
     /****     If you want to use more than one kernels    ****/
     
-    /*FLIPACK2D<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nchebnode, &Atree);
-     
-     C.get_Solution();*/
+    /*FLIPACK<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nchebnode, &Atree);
+    
+    C.get_Solution();*/
     
     double time_Fast_method =   double(end-start)/double(CLOCKS_PER_SEC);
 
@@ -115,9 +163,9 @@ int main(){
     
     MatrixXd Q;
     
-    kernel_Gaussian B; // Make sure the type of B here
-                       // corresponds to the kernel used
-                       // to generate Q.
+    mykernel B; // Make sure the type of B here
+                // corresponds to the kernel used
+                // to generate Q.
     
     B.kernel2D(N, location, N, location, Q);
     
