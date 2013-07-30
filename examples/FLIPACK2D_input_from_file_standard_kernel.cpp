@@ -28,7 +28,7 @@ int main(){
     /*******    Getting location and Htranspose   *******/
 
 	unsigned long N;            //  Number of unknowns;
-    VectorXd location[2];       //  Location of the unknowns;
+    vector<Point> location;       //  Location of the unknowns;
     unsigned m;                 //  Number of measurements;
     MatrixXd Htranspose;        //  Transpose of the measurement operator;
     
@@ -77,7 +77,7 @@ int main(){
     cout << endl << "PERFORMING FAST LINEAR INVERSION..." << endl;
     
     start   =   clock();
-    
+    H2_2D_tree Atree(nchebnode, Htranspose, location);// Build the fmm tree;
     /* Options of kernel:
      LOGARITHM:          kernel_Logarithm
      ONEOVERR2:          kernel_OneOverR2
@@ -87,11 +87,17 @@ int main(){
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
     
-    FLIPACK2D<kernel_Gaussian> A(location, Htranspose, X, measurements, R, nchebnode);
+    FLIPACK2D<kernel_Gaussian> A(location, Htranspose, X, measurements, R, nchebnode, &Atree);
     
     A.get_Solution();
         
     end   =   clock();
+    
+    /****     If you want to use more than one kernels    ****/
+    
+    /*FLIPACK2D<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nchebnode, &Atree);
+     
+     C.get_Solution();*/
     
     double time_Fast_method =   double(end-start)/double(CLOCKS_PER_SEC);
 

@@ -16,10 +16,16 @@ using namespace std;
 using namespace Eigen;
 
 //  Function gets the location of the unknowns from the user;
-void get_Location(unsigned long& N, VectorXd* location){
-	N           =	20000;              //  Number of unknowns;
-	location[0]	=	VectorXd::Random(N);//  x component of the location;
-	location[1]	=	VectorXd::Random(N);//  y component of the location;
+void get_Location(unsigned long& N, vector<Point>& location){
+	N           =	5000;
+	VectorXd tmp1	=	VectorXd::Random(N);
+	VectorXd tmp2	=	VectorXd::Random(N);
+    for (unsigned long i = 0; i < N; i++) {
+        Point new_Point;
+        new_Point.x =   tmp1[i];
+        new_Point.y =   tmp2[i];
+        location.push_back(new_Point);
+    }
 }
 
 //  Measurement operator from the user;
@@ -45,10 +51,9 @@ void get_nchebnode(unsigned short& nchebnode){
 
 class mykernel: public kernel_base {
 public:
-    //point r0 = (r0_x, r0_y); point r1 = (r1_x, r1_y)
-    virtual double kernel_func(double r0_x, double r0_y, double r1_x, double r1_y){
+    virtual double kernel_func(Point r0, Point r1){
         //implement your own kernel here
-        double R_square	=	(r0_x-r1_x)*(r0_x-r1_x) + (r0_y-r1_y)*(r0_y-r1_y);
+        double R_square	=	(r0.x-r1.x)*(r0.x-r1.x) + (r0.y-r1.y)*(r0.y-r1.y);
         return 1.0 + R_square;
     }
 };
@@ -67,7 +72,7 @@ int main(){
     /*******    Getting the configuration of the grid   *******/
 
 	unsigned long N;            //  Number of unknowns;
-    VectorXd location[2];       //  Location of the unknowns;
+    vector<Point> location;       //  Location of the unknowns;
     
     get_Location(N,location);
     
@@ -120,7 +125,7 @@ int main(){
     cout << endl << "PERFORMING FAST LINEAR INVERSION..." << endl;
     
     start   =   clock();
-    
+    H2_2D_tree Atree(nchebnode, Htranspose, location);// Build the fmm tree;
     /* Options of kernel:
      LOGARITHM:          kernel_Logarithm
      ONEOVERR2:          kernel_OneOverR2
@@ -130,17 +135,17 @@ int main(){
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
     
-    FLIPACK2D<mykernel> A(location, Htranspose, X, measurements, R, nchebnode);
+    FLIPACK2D<mykernel> A(location, Htranspose, X, measurements, R, nchebnode, &Atree);
     
     A.get_Solution();
     
-    
-    FLIPACK2D<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nchebnode);
-    
-    C.get_Solution();
-
-        
     end   =   clock();
+    
+    /****     If you want to use more than one kernels    ****/
+    
+    /*FLIPACK2D<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nchebnode, &Atree);
+    
+    C.get_Solution();*/
     
     double time_Fast_method =   double(end-start)/double(CLOCKS_PER_SEC);
 

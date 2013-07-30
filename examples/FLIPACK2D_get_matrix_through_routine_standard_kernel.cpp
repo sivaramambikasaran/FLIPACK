@@ -15,10 +15,16 @@ using namespace std;
 using namespace Eigen;
 
 //  Function gets the location of the unknowns from the user;
-void get_Location(unsigned long& N, VectorXd* location){
-	N           =	20000;              //  Number of unknowns;
-	location[0]	=	VectorXd::Random(N);//  x component of the location;
-	location[1]	=	VectorXd::Random(N);//  y component of the location;
+void get_Location(unsigned long& N, vector<Point>& location){
+	N           =	5000;
+	VectorXd tmp1	=	VectorXd::Random(N);
+	VectorXd tmp2	=	VectorXd::Random(N);
+    for (unsigned long i = 0; i < N; i++) {
+        Point new_Point;
+        new_Point.x =   tmp1[i];
+        new_Point.y =   tmp2[i];
+        location.push_back(new_Point);
+    }
 }
 
 //  Measurement operator from the user;
@@ -56,7 +62,7 @@ int main(){
     /*******    Getting the configuration of the grid   *******/
 
 	unsigned long N;            //  Number of unknowns;
-    VectorXd location[2];       //  Location of the unknowns;
+    vector<Point> location;       //  Location of the unknowns;
     
     get_Location(N,location);
     
@@ -110,6 +116,8 @@ int main(){
     
     start   =   clock();
     
+    H2_2D_tree Atree(nchebnode, Htranspose, location);// Build the fmm tree;
+    
     /* Options of kernel:
      LOGARITHM:          kernel_Logarithm
      ONEOVERR2:          kernel_OneOverR2
@@ -119,11 +127,17 @@ int main(){
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
     
-    FLIPACK2D<kernel_Gaussian> A(location, Htranspose, X, measurements, R, nchebnode);
+    FLIPACK2D<kernel_Gaussian> A(location, Htranspose, X, measurements, R, nchebnode, &Atree);
     
     A.get_Solution();
         
     end   =   clock();
+    
+    /****     If you want to use more than one kernels    ****/
+    
+    /*FLIPACK2D<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nchebnode, &Atree);
+     
+     C.get_Solution();*/
     
     double time_Fast_method =   double(end-start)/double(CLOCKS_PER_SEC);
 

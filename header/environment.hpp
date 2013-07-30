@@ -17,6 +17,7 @@
 #include <cctype>
 #include <string>
 #include <stdlib.h>
+#include<vector>
 #include"cmath"
 #include"Eigen/Dense"
 

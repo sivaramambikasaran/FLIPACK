@@ -19,10 +19,8 @@ using namespace std;
 template <typename T>
 class FLIPACK2D{
 public:
-    FLIPACK2D(VectorXd* location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode);
-    ~FLIPACK2D();
+    FLIPACK2D(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree*Atree);
     void get_QH_transpose();
-    void build_fmm_tree();
     void get_HQH_transpose();
     void get_Psi();
     void get_Phi();
@@ -39,12 +37,12 @@ private:
     MatrixXd X;
     MatrixXd measurements;
     MatrixXd R;
-    VectorXd* location;
+    vector<Point> location;
     
     MatrixXd Main_Matrix;
     
     
-    bool computed_QH_transpose, computed_HQH_transpose, computed_Psi, computed_Phi, computed_Solution, computed_Xi, computed_Beta, computed_V_diag, computed_Main_Matrix, computed_Intermediate_Solution,built_tree;
+    bool computed_QH_transpose, computed_HQH_transpose, computed_Psi, computed_Phi, computed_Solution, computed_Xi, computed_Beta, computed_V_diag, computed_Main_Matrix, computed_Intermediate_Solution;
     
     unsigned short nchebnode;
     
@@ -65,13 +63,14 @@ private:
 
 
 template <typename T>
-FLIPACK2D<T>::FLIPACK2D(VectorXd* location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode){
+FLIPACK2D<T>::FLIPACK2D(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree *Atree){
     this->location          =   location;
     this->H_transpose       =   H_transpose;
     this->X                 =   X;
     this->measurements      =   measurements;
     this->R                 =   R;
     this->nchebnode         =   nchebnode;
+    this->Atree             =   Atree;
     
     computed_QH_transpose           =   false;
     computed_HQH_transpose          =   false;
@@ -83,7 +82,6 @@ FLIPACK2D<T>::FLIPACK2D(VectorXd* location, MatrixXd& H_transpose, MatrixXd& X, 
     computed_Beta                   =   false;
     computed_V_diag                 =   false;
     computed_Solution               =   false;
-    built_tree                      =   false;
     
     N                       =   H_transpose.rows();
     m                       =   H_transpose.cols();
@@ -94,15 +92,10 @@ FLIPACK2D<T>::FLIPACK2D(VectorXd* location, MatrixXd& H_transpose, MatrixXd& X, 
     QH_transpose            =   MatrixXd(N,m);
 }
 
-template <typename T>
-FLIPACK2D<T>::~FLIPACK2D() {
-    delete Atree;
-}
 
 template <typename T>
 void FLIPACK2D<T>::get_QH_transpose(){
     if (computed_QH_transpose==false) {
-        build_fmm_tree();
         cout << endl << "Performing FMM to obtain QH_transpose..." << endl;
         QH_transpose            =   MatrixXd(N,m);
         T A;
@@ -112,14 +105,6 @@ void FLIPACK2D<T>::get_QH_transpose(){
     }
 }
 
-template <typename T>
-void FLIPACK2D<T>::build_fmm_tree() {
-    if (!built_tree) {
-        Atree =   new H2_2D_tree(nchebnode, H_transpose, location);
-        built_tree  =   true;
-        cout << "fmm tree built" << endl;
-    }
-}
 
 template <typename T>
 void FLIPACK2D<T>::get_HQH_transpose(){
@@ -203,7 +188,7 @@ void FLIPACK2D<T>::get_Solution(){
         get_QH_transpose();
         get_Beta();
         get_Xi();
-        Solution        =   X*Beta +   QH_transpose*Xi;
+        Solution            =   X*Beta +   QH_transpose*Xi;
         computed_Solution   =   true;
         cout << "Obtained Solution" << endl;
     }

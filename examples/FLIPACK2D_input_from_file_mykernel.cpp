@@ -16,10 +16,9 @@ using namespace Eigen;
 
 class mykernel: public kernel_base {
 public:
-    //point r0 = (r0_x, r0_y); point r1 = (r1_x, r1_y)
-    virtual double kernel_func(double r0_x, double r0_y, double r1_x, double r1_y){
+    virtual double kernel_func(Point r0, Point r1){
         //implement your own kernel here
-        double R_square	=	(r0_x-r1_x)*(r0_x-r1_x) + (r0_y-r1_y)*(r0_y-r1_y);
+        double R_square	=	(r0.x-r1.x)*(r0.x-r1.x) + (r0.y-r1.y)*(r0.y-r1.y);
         return 1.0 + R_square;
     }
 };
@@ -38,7 +37,7 @@ int main(){
     /*******    Getting location and Htranspose   *******/
 
 	unsigned long N;            //  Number of unknowns;
-    VectorXd location[2];       //  Location of the unknowns;
+    vector<Point> location;       //  Location of the unknowns;
     unsigned m;                 //  Number of measurements;
     MatrixXd Htranspose;        //  Transpose of the measurement operator;
     
@@ -87,7 +86,7 @@ int main(){
     cout << endl << "PERFORMING FAST LINEAR INVERSION..." << endl;
     
     start   =   clock();
-    
+    H2_2D_tree Atree(nchebnode, Htranspose, location);// Build the fmm tree;
     /* Options of kernel:
      LOGARITHM:          kernel_Logarithm
      ONEOVERR2:          kernel_OneOverR2
@@ -97,11 +96,17 @@ int main(){
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
     
-    FLIPACK2D<mykernel> A(location, Htranspose, X, measurements, R, nchebnode);
+    FLIPACK2D<mykernel> A(location, Htranspose, X, measurements, R, nchebnode, &Atree);
     
     A.get_Solution();
         
     end   =   clock();
+    
+    /****     If you want to use more than one kernels    ****/
+    
+    /*FLIPACK2D<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nchebnode, &Atree);
+     
+     C.get_Solution();*/
     
     double time_Fast_method =   double(end-start)/double(CLOCKS_PER_SEC);
 
