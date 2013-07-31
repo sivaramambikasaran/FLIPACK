@@ -4,9 +4,7 @@ Date: July 26th, 2013
 
 **Version 3.1 - First external release.**
 
-%% Copyleft <span style="-moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); display: inline-block;">
-    ©
-</span> 2013: Sivaram Ambikasaran, Ruoxi Wang, Peter Kitanidis and Eric Darve  
+%% Copyleft <img src="http://upload.wikimedia.org/wikipedia/commons/8/8b/Copyleft.svg" alt="Drawing" style="width: 10px;"/>  2013: Sivaram Ambikasaran, Ruoxi Wang, Peter Kitanidis and Eric Darve  
 %% Developed by Sivaram Ambikasaran, Ruoxi Wang  
 %% Contact: <siva.1985@gmail.com> (Sivaram), <ruoxi@stanford.edu> (Ruoxi)  
 %%   
