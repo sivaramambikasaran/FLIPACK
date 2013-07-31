@@ -20,6 +20,7 @@ template <typename T>
 class FLIPACK{
 public:
     FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nChebNode, H2_2D_Tree*Atree);
+    ~FLIPACK();
     void get_QHtranspose();
     void get_HQHtranspose();
     void get_Psi();
@@ -92,6 +93,12 @@ FLIPACK<T>::FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, 
     QHtranspose            =   MatrixXd(N,m);
 }
 
+template <typename T>
+FLIPACK<T>::~FLIPACK() {
+    if (Atree!=NULL) {
+        delete Atree;
+    }
+}
 
 template <typename T>
 void FLIPACK<T>::get_QHtranspose(){
