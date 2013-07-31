@@ -21,20 +21,18 @@ Date: July 26th, 2013
 	./input/		:	The input file.
 	./README.md		:	This file
 	./License.md	:	License file
-	./Makefile		:	Makefile
+	./Makefile		:	Makefile  
 
 ###SETTING THINGS UP:
 
 1. To run this package, you need to have Eigen an **BBFMM2D**.
 
     * Set Eigen:  
-    
 	    1). Download Eigen from here: <http://eigen.tuxfamily.org/index.php?title=Main_Page>  
 	    2).  Create a directory named *Codes/* inside the main Eigen folder and copy the directory  *FLIPACK/* into the directory *Codes/*.  
 	    3).  Open the Makefile, which is inside the folder FLIPACK. Ensure that you have included the path to Eigen in the line containing `CFLAGS`. For instance, in the above setting, the path *"-I ./../../"* should be included in the Makefile.  
 
     * Set BBFMM2D:  
-    
 	    1). Download BBFMM2D from here <http://sivaramambikasaran.github.io/BBFMM2D/>  
 	    2).  Copy directory *BBFMM2D/* inside of the directory *Codes/*.
 
