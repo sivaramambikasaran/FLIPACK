@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall -DNDEBUG -O3 -ffast-math -ffinite-math-only -I ./header/ -I ./../BBFMM2D/header/ -I ./../../ 
 LDFLAGS=
-SOURCES=./src/read_X_R_measurements.cpp ./../BBFMM2D/src/H2_2D_node.cpp ./../BBFMM2D/src/H2_2D_tree.cpp ./../BBFMM2D/src/kernel_base.cpp ./../BBFMM2D/src/kernel_types.cpp ./../BBFMM2D/src/read_location_H.cpp
+SOURCES=./src/read_X_R_Measurements.cpp ./../BBFMM2D/src/H2_2D_Node.cpp ./../BBFMM2D/src/H2_2D_Tree.cpp ./../BBFMM2D/src/kernel_Base.cpp ./../BBFMM2D/src/kernel_Types.cpp ./../BBFMM2D/src/read_Location_H.cpp
 
 
 SOURCESA=examples/FLIPACK_input_from_file_standard_kernel.cpp

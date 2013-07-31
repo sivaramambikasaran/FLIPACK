@@ -61,7 +61,7 @@ The files you have control over are the files inside the directory ./examples/, 
 
 Go to /examples/, open "FLIPACK_get_matrix_through_routine_standard_kernel.cpp".
 --To generate matrix through routine: 
-  Change functions get_Location(), get_Measurement_operator(), get_X() and get_nchebnode().
+  Change functions get_Location(), get_Measurement_Operator(), get_X() and get_nChebNode().
 --To use standard kernels: 
   Select the kernel type in main().
   Options of kernels:
@@ -79,8 +79,8 @@ Go to the folder /input/, put your input file inside of this folder.
 Go to the folder /examples/, open "FLIPACK_input_from_file_standard_kernel.cpp".
 --To change input filename:
   change the two lines in main():
-  string filename_location_Htranpose = "./../input/test_location_H.txt";
-  string filename_X_R_measurements = "./../input/test_X_R_measurements.txt";
+  string filename_location_Htranpose = "./../input/test_Location_H.txt";
+  string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt";
   
 --To use standard kernels:
   The same step as described in 1).
@@ -90,7 +90,7 @@ Go to the folder /examples/, open "FLIPACK_input_from_file_standard_kernel.cpp".
 
 Go to /examples/, open "FLIPACK_get_matrix_through_routine_mykernel.cpp".
 --To define your own kernel:
-  Modify class mykernel. 
+  Modify class myKernel. 
 --To generate your matrix:
   The same step as described in 1).
 
@@ -98,7 +98,7 @@ Go to /examples/, open "FLIPACK_get_matrix_through_routine_mykernel.cpp".
 
 Go to /examples/, open "FLIPACK_input_from_file_mykernel.cpp".
 --To define your own kernel:
-  Modify class mykernel. 
+  Modify class myKernel. 
 --To change input filename:
   The same step as described in 2).
 

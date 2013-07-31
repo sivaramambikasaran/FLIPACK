@@ -19,9 +19,9 @@ using namespace std;
 template <typename T>
 class FLIPACK{
 public:
-    FLIPACK(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree*Atree);
-    void get_QH_transpose();
-    void get_HQH_transpose();
+    FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nChebNode, H2_2D_Tree*Atree);
+    void get_QHtranspose();
+    void get_HQHtranspose();
     void get_Psi();
     void get_Phi();
     void get_Xi();
@@ -29,26 +29,26 @@ public:
     void get_Solution();
     void get_Posterior_Variance();
     
-    MatrixXd QH_transpose, HQH_transpose, Psi, Phi, Solution, Xi, Beta, V_diag;
-    H2_2D_tree *Atree;
+    MatrixXd QHtranspose, HQHtranspose, Psi, Phi, Solution, Xi, Beta, vDiag;
+    H2_2D_Tree *Atree;
     
 private:
-    MatrixXd H_transpose;
+    MatrixXd Htranspose;
     MatrixXd X;
     MatrixXd measurements;
     MatrixXd R;
     vector<Point> location;
     
-    MatrixXd Main_Matrix;
+    MatrixXd mainMatrix;
     
     
-    bool computed_QH_transpose, computed_HQH_transpose, computed_Psi, computed_Phi, computed_Solution, computed_Xi, computed_Beta, computed_V_diag, computed_Main_Matrix, computed_Intermediate_Solution;
+    bool computedQHtranspose, computedHQHtranspose, computedPsi, computedPhi, computedSolution, computedXi, computedBeta, computedVDiag, computedMainMatrix, computedIntermediateSolution;
     
-    unsigned short nchebnode;
+    unsigned short nChebNode;
     
     unsigned long N;            //  Number of unknowns
     unsigned m;                 //  Number of measurements
-    unsigned nmeasurementsets;  //  Number of sets of measruements
+    unsigned nMeasurementSets;  //  Number of sets of measruements
     unsigned p;                 //  Number of columns of X
     
     void get_Main_Matrix();
@@ -57,139 +57,139 @@ private:
     
     FullPivLU<MatrixXd> lu;
     
-    MatrixXd intermediate_solution;
+    MatrixXd intermediateSolution;
 };
 
 
 
 template <typename T>
-FLIPACK<T>::FLIPACK(vector<Point>& location, MatrixXd& H_transpose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nchebnode, H2_2D_tree *Atree){
+FLIPACK<T>::FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nChebNode, H2_2D_Tree *Atree){
     this->location          =   location;
-    this->H_transpose       =   H_transpose;
+    this->Htranspose       =   Htranspose;
     this->X                 =   X;
     this->measurements      =   measurements;
     this->R                 =   R;
-    this->nchebnode         =   nchebnode;
+    this->nChebNode         =   nChebNode;
     this->Atree             =   Atree;
     
-    computed_QH_transpose           =   false;
-    computed_HQH_transpose          =   false;
-    computed_Psi                    =   false;
-    computed_Phi                    =   false;
-    computed_Main_Matrix            =   false;
-    computed_Intermediate_Solution  =   false;
-    computed_Xi                     =   false;
-    computed_Beta                   =   false;
-    computed_V_diag                 =   false;
-    computed_Solution               =   false;
+    computedQHtranspose           =   false;
+    computedHQHtranspose          =   false;
+    computedPsi                    =   false;
+    computedPhi                    =   false;
+    computedMainMatrix             =   false;
+    computedIntermediateSolution   =   false;
+    computedXi                     =   false;
+    computedBeta                   =   false;
+    computedVDiag                 =   false;
+    computedSolution               =   false;
     
-    N                       =   H_transpose.rows();
-    m                       =   H_transpose.cols();
+    N                       =   Htranspose.rows();
+    m                       =   Htranspose.cols();
     p                       =   X.cols();
-    nmeasurementsets        =   measurements.cols();
+    nMeasurementSets        =   measurements.cols();
     
-    Main_Matrix             =   MatrixXd(m+p,m+p);
-    QH_transpose            =   MatrixXd(N,m);
+    mainMatrix              =   MatrixXd(m+p,m+p);
+    QHtranspose            =   MatrixXd(N,m);
 }
 
 
 template <typename T>
-void FLIPACK<T>::get_QH_transpose(){
-    if (computed_QH_transpose==false) {
-        cout << endl << "Performing FMM to obtain QH_transpose..." << endl;
-        QH_transpose            =   MatrixXd(N,m);
+void FLIPACK<T>::get_QHtranspose(){
+    if (computedQHtranspose==false) {
+        cout << endl << "Performing FMM to obtain QHtranspose..." << endl;
+        QHtranspose            =   MatrixXd(N,m);
         T A;
-        A.calculatepotential(*Atree,QH_transpose);
-        computed_QH_transpose   =   true;
-        cout << endl << "Obtained QH_transpose" << endl;
+        A.calculate_Potential(*Atree,QHtranspose);
+        computedQHtranspose   =   true;
+        cout << endl << "Obtained QHtranspose" << endl;
     }
 }
 
 
 template <typename T>
-void FLIPACK<T>::get_HQH_transpose(){
-    if (computed_HQH_transpose==false) {
-        get_QH_transpose();
-        HQH_transpose   =   H_transpose.transpose()*QH_transpose;
-        computed_HQH_transpose  =   true;
-        cout << "Obtained HQH_transpose" << endl;
+void FLIPACK<T>::get_HQHtranspose(){
+    if (computedHQHtranspose==false) {
+        get_QHtranspose();
+        HQHtranspose   =   Htranspose.transpose()*QHtranspose;
+        computedHQHtranspose  =   true;
+        cout << "Obtained HQHtranspose" << endl;
     }
 }
 
 template <typename T>
 void FLIPACK<T>::get_Psi(){
-    if (computed_Psi==false) {
-        get_HQH_transpose();
-        Psi =   HQH_transpose + R;
-        computed_Psi            =   true;
+    if (computedPsi==false) {
+        get_HQHtranspose();
+        Psi =   HQHtranspose + R;
+        computedPsi            =   true;
         cout << "Obtained Psi" << endl;
     }
 }
 
 template <typename T>
 void FLIPACK<T>::get_Phi(){
-    if (computed_Phi==false) {
-        Phi =   H_transpose.transpose()*X;
-        computed_Phi            =   true;
+    if (computedPhi==false) {
+        Phi =   Htranspose.transpose()*X;
+        computedPhi            =   true;
         cout << "Obtained Phi" << endl;
     }
 }
 
 template <typename T>
 void FLIPACK<T>::get_Main_Matrix(){
-    if (computed_Main_Matrix==false) {
+    if (computedMainMatrix==false) {
         get_Psi();
-        Main_Matrix.block(0,0,m,m)  =   Psi;
+        mainMatrix.block(0,0,m,m)  =   Psi;
         get_Phi();
-        Main_Matrix.block(0,m,m,p)  =   Phi;
-        Main_Matrix.block(m,0,p,m)  =   Phi.transpose();
-        Main_Matrix.block(m,m,p,p)  =   MatrixXd::Zero(p,p);
-        lu.compute(Main_Matrix);
-        computed_Main_Matrix    =   true;
+        mainMatrix.block(0,m,m,p)  =   Phi;
+        mainMatrix.block(m,0,p,m)  =   Phi.transpose();
+        mainMatrix.block(m,m,p,p)  =   MatrixXd::Zero(p,p);
+        lu.compute(mainMatrix);
+        computedMainMatrix    =   true;
         cout << "Obtained Main matrix" << endl;
     }
 }
 
 template <typename T>
 void FLIPACK<T>::get_Intermediate_Solution(){
-    if (computed_Intermediate_Solution==false) {
+    if (computedIntermediateSolution==false) {
         get_Main_Matrix();
-        MatrixXd rhs                        =   MatrixXd::Zero(m+p,nmeasurementsets);
-        rhs.block(0,0,m,nmeasurementsets)   =   measurements;
-        intermediate_solution               =   lu.solve(rhs);
-        computed_Intermediate_Solution      =   true;
+        MatrixXd rhs                        =   MatrixXd::Zero(m+p,nMeasurementSets);
+        rhs.block(0,0,m,nMeasurementSets)   =   measurements;
+        intermediateSolution               =   lu.solve(rhs);
+        computedIntermediateSolution      =   true;
         cout << "Obtained Intermediate solution" << endl;
     }
 }
 
 template <typename T>
 void FLIPACK<T>::get_Xi(){
-    if (computed_Xi==false) {
+    if (computedXi==false) {
         get_Intermediate_Solution();
-        Xi              =   intermediate_solution.block(0,0,m,nmeasurementsets);
-        computed_Xi     =   true;
+        Xi              =   intermediateSolution.block(0,0,m,nMeasurementSets);
+        computedXi     =   true;
         cout << "Obtained Xi" << endl;
     }
 }
 
 template <typename T>
 void FLIPACK<T>::get_Beta(){
-    if (computed_Xi==false) {
+    if (computedXi==false) {
         get_Intermediate_Solution();
-        Beta            =   intermediate_solution.block(m,0,p,nmeasurementsets);
-        computed_Beta   =   true;
+        Beta            =   intermediateSolution.block(m,0,p,nMeasurementSets);
+        computedBeta   =   true;
         cout << "Obtained Beta" << endl;
     }
 }
 
 template <typename T>
 void FLIPACK<T>::get_Solution(){
-    if (computed_Solution==false) {
-        get_QH_transpose();
+    if (computedSolution==false) {
+        get_QHtranspose();
         get_Beta();
         get_Xi();
-        Solution            =   X*Beta +   QH_transpose*Xi;
-        computed_Solution   =   true;
+        Solution            =   X*Beta +   QHtranspose*Xi;
+        computedSolution   =   true;
         cout << "Obtained Solution" << endl;
     }
 }

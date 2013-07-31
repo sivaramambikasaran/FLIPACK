@@ -4,14 +4,14 @@
 //
 //	<author>Sivaram Ambikasaran, Ruoxi Wang</author>
 //	
-//	read_X_R_measurements.cpp
+//	read_X_R_Measurements.cpp
 //
 
-#include"read_X_R_measurements.hpp"
+#include"read_X_R_Measurements.hpp"
 
 
 
-void read_X_R_measurements (const string& filename, unsigned long &N, unsigned short& p, unsigned& m, unsigned& nmeasurementsets, MatrixXd& X, MatrixXd& R, MatrixXd& measurements) {
+void read_X_R_Measurements (const string& filename, unsigned long &N, unsigned short& p, unsigned& m, unsigned& nMeasurementSets, MatrixXd& X, MatrixXd& R, MatrixXd& measurements) {
     ifstream fin;
 	fin.open(filename.c_str());
 	
@@ -27,27 +27,27 @@ void read_X_R_measurements (const string& filename, unsigned long &N, unsigned s
     stringstream ss;
     ss << line;
     char comma;
-    ss >> N >> comma >> p >> comma >> m >> comma >> nmeasurementsets;
+    ss >> N >> comma >> p >> comma >> m >> comma >> nMeasurementSets;
     X               =   MatrixXd::Zero(N,p);
     R               =   MatrixXd::Zero(m,m);
-    measurements    =   MatrixXd::Zero(m,nmeasurementsets);
+    measurements    =   MatrixXd::Zero(m,nMeasurementSets);
     unsigned long row = 0;
     while(getline(fin, line)){
         line.erase(remove(line.begin(), line.end(), ' '),
                    line.end());
         if (row < N) {
-            read_matrix_by_line(line, row, X, p);
+            read_Matrix_By_Line(line, row, X, p);
         }else if (row < N+m) {
-            read_matrix_by_line(line, row-N, R, m);
+            read_Matrix_By_Line(line, row-N, R, m);
         }else {
-            read_matrix_by_line(line, row-N-m, measurements, nmeasurementsets);
+            read_Matrix_By_Line(line, row-N-m, measurements, nMeasurementSets);
         }
         row++;
     }
     fin.close();
 }
 
-void read_matrix_by_line(const string& s, unsigned long row, MatrixXd& M, unsigned m) {
+void read_Matrix_By_Line(const string& s, unsigned long row, MatrixXd& M, unsigned m) {
     if (!s.empty()) {
         unsigned k = 0;
         const char* start_pt = NULL;

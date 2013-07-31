@@ -4,10 +4,10 @@
 //
 //	<author>Sivaram Ambikasaran, Ruoxi Wang</author>
 //	
-//	read_X_R_measurements.hpp
+//	read_X_R_Measurements.hpp
 //
-#ifndef __read_X_R_measurements_hpp__
-#define __read_X_R_measurements_hpp__
+#ifndef __read_X_R_Measurements_hpp__
+#define __read_X_R_Measurements_hpp__
 
 #include"environment.hpp"
 
@@ -25,8 +25,8 @@ using namespace std;
  (meas_elem1,meas_elem2,...,meas_elemmm)
  ....
  */
-void read_X_R_measurements (const string& filename, unsigned long &N, unsigned short& p, unsigned& m, unsigned& nmeasurementsets, MatrixXd& X, MatrixXd& R, MatrixXd& measurements);
+void read_X_R_Measurements (const string& filename, unsigned long &N, unsigned short& p, unsigned& m, unsigned& nMeasurementSets, MatrixXd& X, MatrixXd& R, MatrixXd& measurements);
 
-void read_matrix_by_line(const string& s, unsigned long row, MatrixXd& M, unsigned m);
+void read_Matrix_By_Line(const string& s, unsigned long row, MatrixXd& M, unsigned m);
 
-#endif //(__read_X_R_measurements_hpp__)
+#endif //(__read_X_R_Measurements_hpp__)
