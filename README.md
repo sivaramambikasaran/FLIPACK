@@ -28,11 +28,11 @@ Date: July 26th, 2013
 1. To run this package, you need to have Eigen an **BBFMM2D**.
     * Set Eigen:  
 	    1). Download Eigen from here: <http://eigen.tuxfamily.org/index.php?title=Main_Page>  
-	    2).  Create a directory named *Codes/* inside the main Eigen folder and copy the directory  *FLIPACK/* into the directory *Codes/*.  
-	    3).  Open the Makefile, which is inside the folder FLIPACK. Ensure that you have included the path to Eigen in the line containing `CFLAGS`. For instance, in the above setting, the path *"-I ./../../"* should be included in the Makefile.  
+	    2).  Create a directory named `Codes/` inside the main Eigen folder and copy the directory  `FLIPACK/` into the directory `Codes/`.  
+	    3).  Open the Makefile, which is inside the folder FLIPACK. Ensure that you have included the path to Eigen in the line containing `CFLAGS`. For instance, in the above setting, the path `"-I ./../../"` should be included in the Makefile.  
     * Set BBFMM2D:  
 	    1). Download BBFMM2D from here <http://sivaramambikasaran.github.io/BBFMM2D/>  
-	    2).  Copy directory *BBFMM2D/* inside of the directory *Codes/*.
+	    2).  Copy directory `BBFMM2D/` inside of the directory `Codes/`.
 
 2. Once you have this set up, you should be able to run the code. Check whether the code runs by performing the following action. Go to the directory where Makefile is in, then key in the following three commands in the terminal:
 
@@ -45,15 +45,15 @@ The code should now run.
 	
 ###CHANGING THE INPUTS:
 
-The files you have control over are the files inside the directory *./examples/*, read through the files both must be self explanatory for the most part.
+The files you have control over are the files inside the directory `./examples/`, read through the files both must be self explanatory for the most part.
 
 1. If you want to generate matrix through your own routine, and use the standard kernels:  
 
-    Go to */examples/*, open *"FLIPACK_get_matrix_through_routine_standard_kernel.cpp"*.  
+    Go to `/examples/`, open `"FLIPACK_get_matrix_through_routine_standard_kernel.cpp"`.  
     * To generate matrix through routine:   
       Change functions `get_Location()`, `get_Measurement_Operator()`, `get_X()` and `get_nChebNode()`.
     * To use standard kernels:   
-      Select the kernel type in *main()*.  
+      Select the kernel type in `main()`.  
       Options of kernels:
         
   			LOGARITHM:          kernel_Logarithm  
@@ -66,10 +66,10 @@ The files you have control over are the files inside the directory *./examples/*
 	
 2. If you want to read matrix from file, and use standard kernels:
 
-    Go to the folder */input/*, put your input file inside of this folder.  
-    Go to the folder */examples/*, open *"FLIPACK_input_from_file_standard_kernel.cpp"*.
+    Go to the folder `/input/`, put your input file inside of this folder.  
+    Go to the folder `/examples/`, open `"FLIPACK_input_from_file_standard_kernel.cpp"`.
     * To change input filename:  
-      change the two lines in *main()*:  
+      change the two lines in `main()`:  
       `string filename_location_Htranpose = "./../input/test_Location_H.txt"`;  
       `string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt"`;
     * To use standard kernels:  
@@ -78,7 +78,7 @@ The files you have control over are the files inside the directory *./examples/*
 
 3. If you want to generate matrix through your own routine, and use your own kernel:
 
-    Go to */examples/*, open *"FLIPACK_get_matrix_through_routine_mykernel.cpp"*.
+    Go to `/examples/`, open `"FLIPACK_get_matrix_through_routine_mykernel.cpp"`.
     * To define your own kernel:  
       Modify `class myKernel`. 
     * To generate your matrix:  
@@ -86,7 +86,7 @@ The files you have control over are the files inside the directory *./examples/*
 
 4. If you want to read matrix from file, and use your own kernel:
 
-    Go to */examples/*, open *"FLIPACK_input_from_file_mykernel.cpp"*.
+    Go to `/examples/`, open `"FLIPACK_input_from_file_mykernel.cpp"`.
     * To define your own kernel:  
       Modify `class myKernel`. 
     * To change input filename:  
@@ -96,14 +96,14 @@ The files you have control over are the files inside the directory *./examples/*
 
 ###INPUT FILES
 
-Go to */input/*, you should put your own input file in the input folder.
+Go to `/input/`, you should put your own input file in the input folder.
 
 The file format is described as follows:
 
 * For input file of location and Htranspose:
 
-    The first row should be like this:  
-*Number of unknowns, Number of sets of measurements*
+    The first row should be like this:    
+`Number of unknowns, Number of sets of measurements`
 
     For example:
 
@@ -112,7 +112,7 @@ The file format is described as follows:
     For the rest of the rows, it should start with locations, followed by a row in Htranspose matrix(elements should be separated using ',') If some element is 0, you can leave it as empty instead of 0. If all the elements in a row is 0, nothing need to be typed after the location.(spaces are allowed)
 
     The row should look like this:  
-    *(location[0],location[1]) (elem1,elem2,elem3,elem4,…,elemn)*
+    `(location[0],location[1]) (elem1,elem2,elem3,elem4,…,elemn)`
 
     For example:
 
@@ -125,7 +125,7 @@ The file format is described as follows:
 * For input file of X, R and measurements:  
 
     The first row should be like this:  
-    *Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets*
+    `Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets`
 
     For example:
  
@@ -133,7 +133,7 @@ The file format is described as follows:
 
     The rest of rows should be rows of X, and then rows of R, and rows of measurements     (in order).  
     Each row should look like this:  
-    *(elem1,elem2,elem3,…,elemn)*
+    `(elem1,elem2,elem3,…,elemn)`
     If some element is 0, you can leave it as empty instead of 0.
 
     For example:  
@@ -145,16 +145,16 @@ The file format is described as follows:
 
     The whole file should look like:
 
-   *Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets*  
-    *Rows of X*  
-    *Rows of R*  
-    *Rows of measurements* 
+   		Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets	 
+    	Rows of X 
+    	Rows of R  
+    	Rows of measurements 
 
 
 ###RUNNING THE CODE:  
 
 Here we give an example:  
-If you want to use *"FLIPACK_input_from_file_standard_kernel.cpp"*
+If you want to use `"FLIPACK_input_from_file_standard_kernel.cpp"`
 
 1. As stated earlier to run the code, go to the appropriate directory and key in the following:
 
@@ -172,17 +172,17 @@ If you want to use *"FLIPACK_input_from_file_standard_kernel.cpp"*
 
 To run other .cpp files:  
 
-1). *FLIPACK_get_matrix_through_routine_mykernel.cpp*  
+1). `FLIPACK_get_matrix_through_routine_mykernel.cpp`  
    key in:  
    
    	make get_matrix_through_routine_mykernel
    
-2). *FLIPACK_get_matrix_through_routine_standard_kernel.cpp*  
+2). `FLIPACK_get_matrix_through_routine_standard_kernel.cpp`  
    key in:  
    
    	make get_matrix_through_routine_standard_kernel
    
-3). *FLIPACK_input_from_file_mykernel.cpp*  
+3). `FLIPACK_input_from_file_mykernel.cpp`   
    key in:  
    
    	make input_from_file_mykernel  
