@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 </div><!-- contents -->
-The backbone of applied inverse methods is linear methods. FLIPACK is a library for linear inverse problems. Fast Multipole Methods is used in matrix-vector multiplication.
+    FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inverion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from \(\mathcal{O}(N^2)\) to \(\mathcal{O}(N)\) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a \(\mathcal{H}^2\) matrix. Matrix-vector products for hierarchical matrices are accelerated using the <a href="http://sivaramambikasaran.github.io/BBFMM2D/index.html">Black Box Fast Multipole Method</a> to accelerate these matrix-vector products.
 <!--Download-->
     <br/>
     <a href="https://github.com/sivaramambikasaran/FLIPACK/tarball/master" class="button"><img src="images/downloadButton.jpeg" WIDTH=150 HEIGHT=80></a>
