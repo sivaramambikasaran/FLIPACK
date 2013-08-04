@@ -111,7 +111,7 @@ The file format is described as follows:
    	
    The first row should be like this 
       
-		`Number of unknowns, Number of sets of measurements`
+		Number of unknowns, Number of sets of measurements
 		
    For example:
 
@@ -121,7 +121,7 @@ The file format is described as follows:
 
    The row should look like this: 
      
-    `(location[0],location[1]) (elem1,elem2,elem3,elem4,…,elemn)`
+    	(location[0],location[1]) (elem1,elem2,elem3,elem4,…,elemn)
 
    For example:
 
@@ -134,15 +134,15 @@ The file format is described as follows:
 
     The first row should be like this:  
     
-    `Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets`
+    	Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets
 
     For example:
  
 		20000,6,10,5
 
     The rest of rows should be rows of X, and then rows of R, and rows of measurements     (in order).  
-    Each row should look like this:  
-    `(elem1,elem2,elem3,…,elemn)`
+    Each row should look like this:    
+    `(elem1,elem2,elem3,…,elemn)`  
     If some element is 0, you can leave it as empty instead of 0.
 
     For example:  
