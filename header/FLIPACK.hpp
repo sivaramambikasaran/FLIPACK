@@ -1,11 +1,13 @@
-//	This Source Code Form is subject to the terms of the Mozilla Public
-//	License, v. 2.0. If a copy of the MPL was not distributed with this
-//	file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
-//	<author>Sivaram Ambikasaran</author>
-//	
-//	FLIPACK.hpp
-//
+/*!	
+ *  \copyright This Source Code Form is subject to the terms of the Mozilla Public
+ *  License, v. 2.0. If a copy of the MPL was not distributed with this
+ *  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *  \author Sivaram Ambikasaran, Ruoxi Wang
+ *  \version 3.1
+*/	
+/*!	\file FLIPACK.hpp
+ header file of class FLIPACK 
+*/
 #ifndef __FLIPACK_hpp__
 #define __FLIPACK_hpp__
 
@@ -15,23 +17,40 @@
 using namespace Eigen;
 using namespace std;
 
-
+/*! Fast linear inversion package */
 template <typename T>
 class FLIPACK{
 public:
+    //! Constructor of FLIPACK.
     FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nChebNode, H2_2D_Tree*Atree);
-    ~FLIPACK();
+    /*! This function obtains the cross covariance.*/
     void get_QHtranspose();
+    /*! This function obtains the measurement operator corrected covariance. */
     void get_HQHtranspose();
+    /*! This function obtains the measurement corrected covariance. */
     void get_Psi();
+    /*! This functiin obtains the measurement operator corrected structure. */
     void get_Phi();
+    /*! This function obtains the correction term.*/
     void get_Xi();
+    /*! This function obtains unknown drift coefficients. */
     void get_Beta();
+    /*! This function obtains the unknown.
+        Running this function will get 
+        all members defined in this class.
+     */
     void get_Solution();
     void get_Posterior_Variance();
     
-    MatrixXd QHtranspose, HQHtranspose, Psi, Phi, Solution, Xi, Beta, vDiag;
-    H2_2D_Tree *Atree;
+    MatrixXd QHtranspose;   /*!< Cross covariance */
+    MatrixXd HQHtranspose;  /*!< Measurement operator corrected covariance */
+    MatrixXd Psi;           /*!< Measurement corrected covariance */
+    MatrixXd Phi;           /*!< Measurement operator corrected structure */
+    MatrixXd Solution;      /*!< Unknown */
+    MatrixXd Xi;            /*!< Correction term */
+    MatrixXd Beta;          /*!< Unknown drift coefficients */
+    MatrixXd vDiag;
+    H2_2D_Tree *Atree;      /*!< Pointer to a tree */
     
 private:
     MatrixXd Htranspose;
@@ -45,12 +64,11 @@ private:
     
     bool computedQHtranspose, computedHQHtranspose, computedPsi, computedPhi, computedSolution, computedXi, computedBeta, computedVDiag, computedMainMatrix, computedIntermediateSolution;
     
-    unsigned short nChebNode;
-    
-    unsigned long N;            //  Number of unknowns
-    unsigned m;                 //  Number of measurements
-    unsigned nMeasurementSets;  //  Number of sets of measruements
-    unsigned p;                 //  Number of columns of X
+    unsigned short nChebNode;   /*!<  Number of Chebyshev nodes per dimension */
+    unsigned long N;            /*!<  Number of unknowns */
+    unsigned m;                 /*!<  Number of measurements */
+    unsigned nMeasurementSets;  /*!<  Number of sets of measruements*/
+    unsigned p;                 /*!<  Number of columns of X*/
     
     void get_Main_Matrix();
     
@@ -66,23 +84,23 @@ private:
 template <typename T>
 FLIPACK<T>::FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nChebNode, H2_2D_Tree *Atree){
     this->location          =   location;
-    this->Htranspose       =   Htranspose;
+    this->Htranspose        =   Htranspose;
     this->X                 =   X;
     this->measurements      =   measurements;
     this->R                 =   R;
     this->nChebNode         =   nChebNode;
     this->Atree             =   Atree;
     
-    computedQHtranspose           =   false;
-    computedHQHtranspose          =   false;
-    computedPsi                    =   false;
-    computedPhi                    =   false;
-    computedMainMatrix             =   false;
-    computedIntermediateSolution   =   false;
-    computedXi                     =   false;
-    computedBeta                   =   false;
-    computedVDiag                 =   false;
-    computedSolution               =   false;
+    computedQHtranspose             =   false;
+    computedHQHtranspose            =   false;
+    computedPsi                     =   false;
+    computedPhi                     =   false;
+    computedMainMatrix              =   false;
+    computedIntermediateSolution    =   false;
+    computedXi                      =   false;
+    computedBeta                    =   false;
+    computedVDiag                   =   false;
+    computedSolution                =   false;
     
     N                       =   Htranspose.rows();
     m                       =   Htranspose.cols();
@@ -90,15 +108,9 @@ FLIPACK<T>::FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, 
     nMeasurementSets        =   measurements.cols();
     
     mainMatrix              =   MatrixXd(m+p,m+p);
-    QHtranspose            =   MatrixXd(N,m);
+    QHtranspose             =   MatrixXd(N,m);
 }
 
-template <typename T>
-FLIPACK<T>::~FLIPACK() {
-    if (Atree!=NULL) {
-        delete Atree;
-    }
-}
 
 template <typename T>
 void FLIPACK<T>::get_QHtranspose(){
@@ -107,7 +119,7 @@ void FLIPACK<T>::get_QHtranspose(){
         QHtranspose            =   MatrixXd(N,m);
         T A;
         A.calculate_Potential(*Atree,QHtranspose);
-        computedQHtranspose   =   true;
+        computedQHtranspose    =   true;
         cout << endl << "Obtained QHtranspose" << endl;
     }
 }

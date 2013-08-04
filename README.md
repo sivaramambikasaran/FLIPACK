@@ -1,12 +1,13 @@
 
 This is the first public release of the FLIPACK library.
+
 Date: July 26th, 2013
 
 **Version 3.1 - First external release.**
 
 %% Copyleft 2013: Sivaram Ambikasaran, Ruoxi Wang, Peter Kitanidis and Eric Darve  
 %% Developed by Sivaram Ambikasaran, Ruoxi Wang  
-%% Contact: <siva.1985@gmail.com> (Sivaram), <ruoxi@stanford.edu> (Ruoxi)  
+%% Contact: <siva.1985@gmail.com>(Sivaram) , <ruoxi@stanford.edu> (Ruoxi)  
 %%   
 %% This program is free software; you can redistribute it and/or modify it under the terms of MPL2 license.  
 %% The Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not %% distributed with this file, You can obtain one at <http://mozilla.org/MPL/2.0/>.  
@@ -26,12 +27,17 @@ Date: July 26th, 2013
 ###SETTING THINGS UP:
 
 1. To run this package, you need to have Eigen an **BBFMM2D**.
-    * Set Eigen:  
-	    1). Download Eigen from here: <http://eigen.tuxfamily.org/index.php?title=Main_Page>  
-	    2).  Create a directory named `Codes/` inside the main Eigen folder and copy the directory  `FLIPACK/` into the directory `Codes/`.  
+    * Set Eigen:
+      
+	    1). Download Eigen from here: <http://eigen.tuxfamily.org/index.php?title=Main_Page> 
+	     
+	    2).  Create a directory named `Codes/` inside the main Eigen folder and copy the directory  `FLIPACK/` into the directory `Codes/`. 
+	     
 	    3).  Open the Makefile, which is inside the folder FLIPACK. Ensure that you have included the path to Eigen in the line containing `CFLAGS`. For instance, in the above setting, the path `"-I ./../../"` should be included in the Makefile.  
     * Set BBFMM2D:  
+    
 	    1). Download BBFMM2D from here <http://sivaramambikasaran.github.io/BBFMM2D/>  
+	    
 	    2).  Copy directory `BBFMM2D/` inside of the directory `Codes/`.
 
 2. Once you have this set up, you should be able to run the code. Check whether the code runs by performing the following action. Go to the directory where Makefile is in, then key in the following three commands in the terminal:
@@ -66,7 +72,8 @@ The files you have control over are the files inside the directory `./examples/`
 	
 2. If you want to read matrix from file, and use standard kernels:
 
-    Go to the folder `/input/`, put your input file inside of this folder.  
+    Go to the folder `/input/`, put your input file inside of this folder. 
+     
     Go to the folder `/examples/`, open `"FLIPACK_input_from_file_standard_kernel.cpp"`.
     * To change input filename:  
       change the two lines in `main()`:  
@@ -100,31 +107,33 @@ Go to `/input/`, you should put your own input file in the input folder.
 
 The file format is described as follows:
 
-* For input file of location and Htranspose:
-
-    The first row should be like this:    
-`Number of unknowns, Number of sets of measurements`
-
-    For example:
+* For input file of location and Htranspose:  
+   	
+   The first row should be like this 
+      
+		`Number of unknowns, Number of sets of measurements`
+		
+   For example:
 
     	20000,10
 
-    For the rest of the rows, it should start with locations, followed by a row in Htranspose matrix(elements should be separated using ',') If some element is 0, you can leave it as empty instead of 0. If all the elements in a row is 0, nothing need to be typed after the location.(spaces are allowed)
+   For the rest of the rows, it should start with locations, followed by a row in Htranspose matrix(elements should be separated using ',') If some element is 0, you can leave it as empty instead of 0. If all the elements in a row is 0, nothing need to be typed after the location.(spaces are allowed)
 
-    The row should look like this:  
+   The row should look like this: 
+     
     `(location[0],location[1]) (elem1,elem2,elem3,elem4,…,elemn)`
 
-    For example:
+   For example:
 
 		(-0.999984,-0.676221) (0.480685,0.869803,-0.188232,0.548587,-0.771039,0.73709,0.126494)  
 		(0.869386,-0.5408)  
 		(0.0655345,0.891162) (-0.193033,,-0.0287383,,-0.520512,0.33891,)  
 		(0.342299,-0.246828) (0.0732668,,,,,,0.0951028)  
-		(-0.984604,-0.44417) (,0.782447,-0.867924,0.485731,-0.729282,-0.481031,0.541473)  
-
+		(-0.984604,-0.44417) (,0.782447,-0.867924,0.485731,-0.729282,-0.481031,0.541473) 
 * For input file of X, R and measurements:  
 
     The first row should be like this:  
+    
     `Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets`
 
     For example:
@@ -175,14 +184,14 @@ To run other .cpp files:
 1). `FLIPACK_get_matrix_through_routine_mykernel.cpp`  
    key in:  
    
-   	make get_matrix_through_routine_mykernel
+   		make get_matrix_through_routine_mykernel
    
 2). `FLIPACK_get_matrix_through_routine_standard_kernel.cpp`  
    key in:  
    
-   	make get_matrix_through_routine_standard_kernel
+   		make get_matrix_through_routine_standard_kernel
    
 3). `FLIPACK_input_from_file_mykernel.cpp`   
    key in:  
    
-   	make input_from_file_mykernel  
+   		make input_from_file_mykernel  

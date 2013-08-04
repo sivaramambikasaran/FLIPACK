@@ -1,11 +1,14 @@
-//	This Source Code Form is subject to the terms of the Mozilla Public
-//	License, v. 2.0. If a copy of the MPL was not distributed with this
-//	file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
-//	<author>Sivaram Ambikasaran, Ruoxi Wang</author>
-//
-//	FLIPACK_input_from_file_standard_kernel.cpp
-//
+/*!
+ *  \copyright This Source Code Form is subject to the terms of the Mozilla Public
+ *  License, v. 2.0. If a copy of the MPL was not distributed with this
+ *  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *  \author Sivaram Ambikasaran, Ruoxi Wang
+ *  \version 3.1
+ */
+/*!	\file FLIPACK_input_from_file_mykernel.cpp
+ Input type: Input file;
+ Kernel type: kernel defined by user.
+*/
 #include"environment.hpp"
 #include"FLIPACK.hpp"
 #include"read_X_R_Measurements.hpp"
@@ -14,6 +17,7 @@
 using namespace std;
 using namespace Eigen;
 
+/*! Deifne user's own kernel */
 class myKernel: public kernel_Base {
 public:
     virtual double kernel_Func(Point r0, Point r1){
@@ -37,7 +41,7 @@ int main(){
     /*******    Getting location and Htranspose   *******/
 
 	unsigned long N;            //  Number of unknowns;
-    vector<Point> location;       //  Location of the unknowns;
+    vector<Point> location;     //  Location of the unknowns;
     unsigned m;                 //  Number of measurements;
     MatrixXd Htranspose;        //  Transpose of the measurement operator;
     

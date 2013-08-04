@@ -1,11 +1,14 @@
-//	This Source Code Form is subject to the terms of the Mozilla Public
-//	License, v. 2.0. If a copy of the MPL was not distributed with this
-//	file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
-//	<author>Sivaram Ambikasaran, Ruoxi Wang</author>
-//
-//	FLIPACK_get_matrix_through_routine_standard_kernel.cpp
-//
+/*!
+ *  \copyright This Source Code Form is subject to the terms of the Mozilla Public
+ *  License, v. 2.0. If a copy of the MPL was not distributed with this
+ *  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *  \author Sivaram Ambikasaran, Ruoxi Wang
+ *  \version 3.1
+ */
+/*! \file	FLIPACK_get_matrix_through_routine_standard_kernel.cpp
+ Input type: Through matrix generating routine;
+ Kernel type: standard kernel.
+*/
 #include"environment.hpp"
 #include"FLIPACK.hpp"
 #include"read_X_R_Measurements.hpp"
@@ -14,9 +17,9 @@
 using namespace std;
 using namespace Eigen;
 
-//  Function gets the location of the unknowns from the user;
+/*!  Gets the location of the unknowns from the user;*/
 void get_Location(unsigned long& N, vector<Point>& location){
-	N           =	5000;
+	N               =	5000;
 	VectorXd tmp1	=	VectorXd::Random(N);
 	VectorXd tmp2	=	VectorXd::Random(N);
     for (unsigned long i = 0; i < N; i++) {
@@ -27,7 +30,7 @@ void get_Location(unsigned long& N, vector<Point>& location){
     }
 }
 
-//  Measurement operator from the user;
+/*!  Get the measurement operator from the user;*/
 void get_Measurement_Operator(const unsigned long N, unsigned& m, unsigned& nMeasurementSets, MatrixXd& Htranspose, MatrixXd& measurements, MatrixXd& R){
 	m               =	10;                                     //	Number of measurements;
     nMeasurementSets=   5;                                      //  Number of measurement sets;
@@ -36,13 +39,13 @@ void get_Measurement_Operator(const unsigned long N, unsigned& m, unsigned& nMea
     R               =   MatrixXd::Identity(m,m);                //  Covariance of the measurements;
 }
 
-//  Get the structure of the mean;
+/*!  Get the structure of the mean;*/
 void get_X(unsigned const N, unsigned short& p, MatrixXd& X){
     p   =   6;
     X   =   MatrixXd::Random(N,p);
 }
 
-//  Get the number of Chebyshev nodes in one direction;
+/*! Get the number of Chebyshev nodes in one direction;*/
 void get_nChebNode(unsigned short& nChebNode){
     nChebNode    =   8;
 }
@@ -62,7 +65,7 @@ int main(){
     /*******    Getting the configuration of the grid   *******/
 
 	unsigned long N;            //  Number of unknowns;
-    vector<Point> location;       //  Location of the unknowns;
+    vector<Point> location;     //  Location of the unknowns;
     
     get_Location(N,location);
     
