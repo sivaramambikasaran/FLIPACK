@@ -6,7 +6,7 @@
  *  \version 3.1
  */
 /*!\file read_X_R_Measurements.cpp
-*/
+ */
 
 #include"read_X_R_Measurements.hpp"
 
@@ -15,7 +15,7 @@
 void read_X_R_Measurements (const string& filename, unsigned long &N, unsigned short& p, unsigned& m, unsigned& nMeasurementSets, MatrixXd& X, MatrixXd& R, MatrixXd& measurements) {
     ifstream fin;
 	fin.open(filename.c_str());
-	
+    
 	if (!fin.good()){
 		cerr << "Failed to open file " << filename << endl;
 		throw runtime_error("Failed to open file!");
@@ -70,5 +70,3 @@ void read_Matrix_By_Line(const string& s, unsigned long row, MatrixXd& M, unsign
             throw runtime_error("Number of measurement is not consistent with input");
     }
 }
-
-
