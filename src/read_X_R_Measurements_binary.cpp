@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void read_X_R_Measurements (const string& filenameX, unsigned long N, unsigned short p,MatrixXd& X,const string& filenameR, unsigned m, MatrixXd& R,const string& filenameMeasurementSets, unsigned nMeasurementSets, MatrixXd& measurements) {
+void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, unsigned short p,MatrixXd& X,const string& filenameR, unsigned m, MatrixXd& R,const string& filenameMeasurementSets, unsigned nMeasurementSets, MatrixXd& measurements) {
     ifstream fin;
     /* Read X */
 	fin.open(filenameX.c_str(),ios::binary);
@@ -33,7 +33,7 @@ void read_X_R_Measurements (const string& filenameX, unsigned long N, unsigned s
 		throw runtime_error("Failed to open file!");
 	}
     R.resize(m,m);
-    fin.read((char*) R.data(), N*p*sizeof(double));
+    fin.read((char*) R.data(), m*m*sizeof(double));
     fin.close();
     
     /* Read Measurements */
@@ -43,7 +43,7 @@ void read_X_R_Measurements (const string& filenameX, unsigned long N, unsigned s
 		cerr << "Failed to open file " << filenameMeasurementSets << endl;
 		throw runtime_error("Failed to open file!");
 	}
-    measurements.resize(m,m);
+    measurements.resize(m,nMeasurementSets);
     fin.read((char*) measurements.data(), m*nMeasurementSets*sizeof(double));
     fin.close();
 }

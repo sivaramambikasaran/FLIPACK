@@ -8,12 +8,11 @@
 /*! \file	FLIPACK_input_from_file_standard_kernel.cpp
  Input type: Input file;
  Kernel type: standard kernel.
-
 */
 
 #include"environment.hpp"
-#include"FLIPACK.hpp"
-#include"read_X_R_Measurements.hpp"
+#include"FLIPACK_Header.hpp"
+#include"BBFMM2D.hpp"
 
 
 using namespace std;
