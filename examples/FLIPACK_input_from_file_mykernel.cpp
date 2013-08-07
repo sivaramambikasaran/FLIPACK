@@ -6,7 +6,7 @@
  *  \version 3.1
  */
 /*!	\file FLIPACK_input_from_file_mykernel.cpp
- Input type: Input file;
+ Input type: Text file;
  Kernel type: kernel defined by user.
 */
 #include"environment.hpp"

@@ -6,7 +6,7 @@
  *  \version 3.1
 */
 /*! \file	FLIPACK_Header.hpp
-   headers used in FLIPACK
+   headers of FLIPACK library
 */
 #ifndef __FLIPACK_Header_hpp__
 #define __FLIPACK_Header_hpp__

@@ -76,10 +76,13 @@ The files you have control over are the files inside the directory `./examples/`
      
     Go to the folder `/examples/`, open `"FLIPACK_input_from_file_standard_kernel.cpp"`.
     * To change input filename:  
+    
       change the two lines in `main()`:  
-      `string filename_location_Htranpose = "./../input/test_Location_H.txt"`;  
-      `string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt"`;
+      
+      		string filename_location_Htranpose = "./../input/test_Location_H.txt";  
+      		string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt";
     * To use standard kernels:  
+    
       The same step as described in 1.
 
 
@@ -104,13 +107,15 @@ The files you have control over are the files inside the directory `./examples/`
     Go to `/examples`, open `"FLIPACK_binary_file_standard_kernel.cpp"`.  
     * To change input filename:  
       change the following lines in `main()`:  
-      `string filenameMetadata 		=   "../input/metadata.txt"`;  
-      `string filenameLocation 		= 	"../input/test_Location.bin"`;  
-      `string filenameH        		= 	"../input/test_H.bin"`;  
-      `string filenameX        		=   "../input/test_X.bin"`;  
-      `string filenameR        		=   "../input/test_R.bin"`;  
-      `string filenameMeasurement  =   "../input/test_Measurement.bin"`;  
+      
+      		string filenameMetadata 		=   "../input/metadata.txt";  
+      		string filenameLocation 		= 	"../input/test_Location.bin";  
+      		string filenameH        		= 	"../input/test_H.bin";  
+      		string filenameX        		=   "../input/test_X.bin";  
+      		string filenameR        		=   "../input/test_R.bin";  
+      		string filenameMeasurement  	=   "../input/test_Measurement.bin";  
     * To use standard kernel:  
+    
      The same step as described in 1.
      
 6. If you want to read matrix from binary file, and use your own kernel:  
@@ -191,11 +196,14 @@ The file format is described as follows:
 
 You should have seperate binary files for each matrix, and a text file containing metadata:  
 
-1. A text file for meta data:  
+1. A text file for meta data: 
+ 
    The file format is:  
-   `N, p, m, nMeasurementSet`.  
+   
+   		N, p, m, nMeasurementSet.  
    For example:  
-   `3245,6,288,6`   
+   
+   		3245,6,288,6  
 2. A binary file for Location:
 
 	Elements are stored this way(row-wise):

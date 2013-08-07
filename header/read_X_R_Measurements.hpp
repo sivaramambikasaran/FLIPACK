@@ -6,7 +6,7 @@
  *  \version 3.1
  */
 /*! \file	read_X_R_Measurements.hpp
-Read X, R and Measurements from file.
+Read X, R and Measurements from text file.
 */
 #ifndef __read_X_R_Measurements_hpp__
 #define __read_X_R_Measurements_hpp__

@@ -6,7 +6,7 @@
  *  \version 3.1
  */
 /*! \file	FLIPACK_binary_file_mykernel.cpp
- Input type: Input binary file;
+ Input type: Binary file;
  Kernel type: kernel defined by user..
 
 */
