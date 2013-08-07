@@ -182,7 +182,7 @@ The file format is described as follows:
 
     The whole file should look like:
 
-   		Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets	 
+   		N, p, m, nMeasurementSet	 
     	Rows of X 
     	Rows of R  
     	Rows of measurements 
