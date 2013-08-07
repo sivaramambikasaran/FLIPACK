@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.4"/>
-<title>FLIPACK: Class Members - Functions</title>
+<title>FLIPACK: header/read_metadata_FLIPACK.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -40,8 +40,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -62,20 +62,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
-      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
-      <li class="current"><a href="functions.html"><span>Class&#160;Members</span></a></li>
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
-  <div id="navrow3" class="tabs2">
-    <ul class="tablist">
-      <li><a href="functions.html"><span>All</span></a></li>
-      <li class="current"><a href="functions_func.html"><span>Functions</span></a></li>
-      <li><a href="functions_vars.html"><span>Variables</span></a></li>
-    </ul>
-  </div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -90,37 +80,40 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_1ec98ce50fa6ec55b40b8ffb1df38c3c.html">header</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle">
+<div class="title">read_metadata_FLIPACK.hpp File Reference</div>  </div>
+</div><!--header-->
 <div class="contents">
-&#160;<ul>
-<li>FLIPACK()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#af72dad9b75014ec9bd09414bc443c5da">FLIPACK&lt; T &gt;</a>
-</li>
-<li>get_Beta()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#a36823327c890feea811b74e592c5eb01">FLIPACK&lt; T &gt;</a>
-</li>
-<li>get_HQHtranspose()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#ab2afb82952d5bfab58c99037fd9f41a0">FLIPACK&lt; T &gt;</a>
-</li>
-<li>get_Phi()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#a653899c637936c28eb54157f6e210a59">FLIPACK&lt; T &gt;</a>
-</li>
-<li>get_Psi()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#ae3094443fdd6caa1f6bbbfa2d456dfdf">FLIPACK&lt; T &gt;</a>
-</li>
-<li>get_QHtranspose()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#ab9bfa27bc2c48bf4c9ad2d912fea1197">FLIPACK&lt; T &gt;</a>
-</li>
-<li>get_Solution()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#aa6163aa9a4116e9f23b981c6397706d4">FLIPACK&lt; T &gt;</a>
-</li>
-<li>get_Xi()
-: <a class="el" href="class_f_l_i_p_a_c_k.html#ac11db9a56f0bc41a4825f8ccd2bcdbec">FLIPACK&lt; T &gt;</a>
-</li>
-</ul>
-</div><!-- contents -->
+
+<p>Read Number of unknowns, number of terms in structure,number of measurements,number of measurement sets from file.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="environment_8hpp_source.html">environment.hpp</a>&quot;</code><br/>
+</div>
+<p><a href="read__metadata___f_l_i_p_a_c_k_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a79bdd9983b01af9a5f0d4deb1a4fd788"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79bdd9983b01af9a5f0d4deb1a4fd788"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>read_Metadata</b> (const string &amp;filenameMetadata, unsigned long &amp;N, unsigned short &amp;p, unsigned &amp;m, unsigned &amp;nMeasurementSets)</td></tr>
+<tr class="separator:a79bdd9983b01af9a5f0d4deb1a4fd788"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Read Number of unknowns, number of terms in structure,number of measurements,number of measurement sets from file. </p>
+<dl class="section copyright"><dt>Copyright</dt><dd>This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at <a href="http://mozilla.org/MPL/2.0/">http://mozilla.org/MPL/2.0/</a>. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Sivaram Ambikasaran, Ruoxi Wang </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>3.1 </dd></dl>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Aug 7 2013 14:27:16 for FLIPACK by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Aug 7 2013 14:27:15 for FLIPACK by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

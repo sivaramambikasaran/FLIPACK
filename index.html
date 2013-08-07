@@ -14,9 +14,11 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<!--Needed for text-->
 <script type="text/javascript"
-src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
+<!--End of needed for text-->
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -83,15 +85,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">FLIPACK Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
+    FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from \(\mathcal{O}(N^2)\) to \(\mathcal{O}(N)\) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a \(\mathcal{H}^2\) matrix. Matrix-vector products for hierarchical matrices are accelerated using the <a href="http://sivaramambikasaran.github.io/BBFMM2D/index.html">Black Box Fast Multipole Method</a> to accelerate these matrix-vector products.
+    
 </div><!-- contents -->
-    FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from \(\mathcal{O}(N^2)\) to \(\mathcal{O}(N)\) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a \(\mathcal{H}^2\) matrix. <a href="http://sivaramambikasaran.github.io/BBFMM2D/index.html">Black Box Fast Multipole Method</a> is used to accelerate these hierarchical matrix-vector products.
-<!--Download-->
+    <!--Download-->
     <br/>
     <a href="https://github.com/sivaramambikasaran/FLIPACK/tarball/master" class="button"><img src="images/downloadButton.jpeg" WIDTH=150 HEIGHT=80></a>
-<!--End of Download-->
+    <!--End of Download-->
+
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Aug 3 2013 17:50:05 for FLIPACK by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Aug 7 2013 14:27:15 for FLIPACK by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>

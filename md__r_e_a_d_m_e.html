@@ -120,7 +120,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p class="startli">Go to <code>/examples/</code>, open <code>"FLIPACK_get_matrix_through_routine_standard_kernel.cpp"</code>.</p>
 <ul>
 <li>To generate matrix through routine: Change functions <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a4a496e550bece6f06f094428ae56a5e7" title="Get the location of the unknowns from the user;. ">get_Location()</a></code>, <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#afd12a639e11b72165f22dfdf87bb52f2" title="Get the measurement operator from the user;. ">get_Measurement_Operator()</a></code>, <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a954d95ad8a8d3f497b1417a1f7304fd9" title="Get the structure of the mean;. ">get_X()</a></code> and <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a5638027c2e49163d982a37ec4c44e5c5" title="Get the number of Chebyshev nodes in one direction;. ">get_nChebNode()</a></code>.</li>
-<li>To use standard kernels: Select the kernel type in <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main()</a></code>. Options of kernels: <pre class="fragment">  LOGARITHM:          kernel_Logarithm  
+<li>To use standard kernels: Select the kernel type in <code>main()</code>. Options of kernels: <pre class="fragment">  LOGARITHM:          kernel_Logarithm  
   ONEOVERR2:          kernel_OneOverR2  
   GAUSSIAN:           kernel_Gaussian  
   QUADRIC:            kernel_Quadric  
@@ -133,8 +133,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p class="startli">Go to the folder <code>/input/</code>, put your input file inside of this folder.</p>
 <p class="startli">Go to the folder <code>/examples/</code>, open <code>"FLIPACK_input_from_file_standard_kernel.cpp"</code>.</p>
 <ul>
-<li>To change input filename: change the two lines in <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main()</a></code>: <code>string filename_location_Htranpose = "./../input/test_Location_H.txt"</code>; <code>string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt"</code>;</li>
-<li>To use standard kernels: The same step as described in 1.</li>
+<li><p class="startli">To change input filename:</p>
+<p class="startli">change the two lines in <code>main()</code>: </p>
+<pre class="fragment">  string filename_location_Htranpose = "./../input/test_Location_H.txt";  
+  string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt";
+</pre></li>
+<li><p class="startli">To use standard kernels:</p>
+<p class="startli">The same step as described in 1.</p>
+</li>
 </ul>
 </li>
 <li><p class="startli">If you want to generate matrix through your own routine, and use your own kernel:</p>
@@ -151,9 +157,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>To change input filename: The same step as described in 2.</li>
 </ul>
 </li>
+<li><p class="startli">If you want to read matrix from binary file, and use standard kernel:</p>
+<p class="startli">Go to <code>/examples</code>, open <code>"FLIPACK_binary_file_standard_kernel.cpp"</code>.</p>
+<ul>
+<li>To change input filename: change the following lines in <code>main()</code>: <pre class="fragment">  string filenameMetadata         =   "../input/metadata.txt";  
+  string filenameLocation         =   "../input/test_Location.bin";  
+  string filenameH                =   "../input/test_H.bin";  
+  string filenameX                =   "../input/test_X.bin";  
+  string filenameR                =   "../input/test_R.bin";  
+  string filenameMeasurement      =   "../input/test_Measurement.bin";  
+</pre></li>
+<li><p class="startli">To use standard kernel:</p>
+<p class="startli">The same step as described in 1.</p>
+</li>
+</ul>
+</li>
+<li><p class="startli">If you want to read matrix from binary file, and use your own kernel:</p>
+<p class="startli">Go to <code>/examples/</code>, open <code>"FLIPACK_binary_file_mykernel.cpp"</code>.</p>
+<ul>
+<li>To change the input filename: The same step as described in 5.</li>
+<li>To define your own kernel: Modify <code>class <a class="el" href="classmy_kernel.html" title="Deifne user&#39;s own kernel. ">myKernel</a></code>.</li>
+</ul>
+</li>
 </ol>
 <h3>INPUT FILES</h3>
-<p>Go to <code>/input/</code>, you should put your own input file in the input folder.</p>
+<p>Go to <code>/input/</code>, you should put your own input files in the input folder. <b>Donotes:</b> </p>
+<pre class="fragment">N:                  Number of unknowns  
+m:                  Number of measurements  
+p:                  Number of terms in the structure  
+nMeasurementSet:    Number of measurement sets  
+</pre> <h4>TEXT FILES</h4>
 <p>The file format is described as follows:</p>
 <ul>
 <li><p class="startli">For input file of location and Htranspose:</p>
@@ -173,7 +206,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </pre></li>
 <li><p class="startli">For input file of X, R and measurements:</p>
 <p class="startli">The first row should be like this: </p>
-<pre class="fragment">Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets
+<pre class="fragment">N, p, m, nMeasurementSet
 </pre><p class="startli">For example: </p>
 <pre class="fragment">20000,6,10,5
 </pre><p class="startli">The rest of rows should be rows of X, and then rows of R, and rows of measurements (in order). Each row should look like this: <code>(elem1,elem2,elem3,…,elemn)</code> If some element is 0, you can leave it as empty instead of 0.</p>
@@ -183,12 +216,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 (0.126619,,,0.262597,-0.470423,0.432109)
 (-0.00923308,0.0931162,-0.57049,-0.112485,0.283007,)
 </pre><p class="startli">The whole file should look like: </p>
-<pre class="fragment">Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets     
+<pre class="fragment">N, p, m, nMeasurementSet     
 Rows of X 
 Rows of R  
 Rows of measurements 
 </pre></li>
 </ul>
+<h4>BINARY FILES</h4>
+<p>You should have seperate binary files for each matrix, and a text file containing metadata:</p>
+<ol type="1">
+<li><p class="startli">A text file for meta data:</p>
+<p class="startli">The file format is: </p>
+<pre class="fragment"> N, p, m, nMeasurementSet.  
+</pre><p> For example: </p>
+<pre class="fragment"> 3245,6,288,6  
+</pre></li>
+<li><p class="startli">A binary file for Location:</p>
+<p class="startli">Elements are stored this way(row-wise): </p>
+<pre class="fragment">loc0.x loc0.y  
+loc1.x loc1.y  
+…
+</pre></li>
+<li>Binary files for H matrix, X, R, Measurements respectively: The elements of each matrix should be stored in their own binary file row-wise.</li>
+</ol>
 <h3>RUNNING THE CODE:</h3>
 <p>Here we give an example: If you want to use <code>"FLIPACK_input_from_file_standard_kernel.cpp"</code></p>
 <ol type="1">
@@ -205,11 +255,15 @@ Rows of measurements
 <pre class="fragment"> make get_matrix_through_routine_mykernel
 </pre><p>2). <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__standard__kernel_8cpp.html" title="Input type: Through matrix generating routine; Kernel type: standard kernel. ">FLIPACK_get_matrix_through_routine_standard_kernel.cpp</a></code> key in: </p>
 <pre class="fragment"> make get_matrix_through_routine_standard_kernel
-</pre><p>3). <code><a class="el" href="_f_l_i_p_a_c_k__input__from__file__mykernel_8cpp.html" title="Input type: Input file; Kernel type: kernel defined by user. ">FLIPACK_input_from_file_mykernel.cpp</a></code> key in: </p>
-<pre class="fragment"> make input_from_file_mykernel  </pre> </div></div><!-- contents -->
+</pre><p>3). <code><a class="el" href="_f_l_i_p_a_c_k__input__from__file__mykernel_8cpp.html" title="Input type: Text file; Kernel type: kernel defined by user. ">FLIPACK_input_from_file_mykernel.cpp</a></code> key in: </p>
+<pre class="fragment"> make input_from_file_mykernel
+</pre><p>4). <code><a class="el" href="_f_l_i_p_a_c_k__binary__file__mykernel_8cpp.html" title="Input type: Binary file; Kernel type: kernel defined by user. ">FLIPACK_binary_file_mykernel.cpp</a></code> key in: </p>
+<pre class="fragment"> make binary_file_mykernel  
+</pre><p>5). <code><a class="el" href="_f_l_i_p_a_c_k__binary__file__standard__kernel_8cpp.html" title="Input type: Binary file; Kernel type: standard kernel. ">FLIPACK_binary_file_standard_kernel.cpp</a></code> key in: </p>
+<pre class="fragment"> make binary_file_standard_kernel</pre> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Aug 3 2013 17:50:05 for FLIPACK by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Aug 7 2013 14:27:15 for FLIPACK by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.4
 </small></address>
