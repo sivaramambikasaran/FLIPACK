@@ -14,6 +14,9 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<!--include this for slides-->
+<script type="text/javascript" src="./javascripts/source/jquery.slides.min.js"></script>
+<!--end of include-->
 <!--Needed for text-->
 <script type="text/javascript"
     src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
@@ -84,14 +87,187 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="headertitle">
 <div class="title">FLIPACK Documentation</div>  </div>
 </div><!--header-->
-<div class="contents">
-    FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from \(\mathcal{O}(N^2)\) to \(\mathcal{O}(N)\) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a \(\mathcal{H}^2\) matrix. Matrix-vector products for hierarchical matrices are accelerated using the <a href="http://sivaramambikasaran.github.io/BBFMM2D/index.html">Black Box Fast Multipole Method</a> to accelerate these matrix-vector products.
-    
-</div><!-- contents -->
-    <!--Download-->
-    <br/>
-    <a href="https://github.com/sivaramambikasaran/FLIPACK/tarball/master" class="button"><img src="images/downloadButton.jpeg" WIDTH=150 HEIGHT=80></a>
-    <!--End of Download-->
+    <table border="0" width="100%" cellspacing="75">
+        <tr>
+            <td width="30%">
+                <!--pictures-->
+                <!-- SlidesJS Optional: If you'd like to use this design -->
+                <style>
+                    body {
+                        -webkit-font-smoothing: antialiased;
+                        font: normal 15px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+                        color: #232525;
+                        padding-top:0px;
+                    }
+                    
+                    #slides {
+                        display: none
+                    }
+                    
+                    #slides .slidesjs-navigation {
+                        margin-top:5px;
+                    }
+                    
+                    a.slidesjs-next,
+                    a.slidesjs-previous,
+                    a.slidesjs-play,
+                    a.slidesjs-stop {
+                        background-image: url(images/btns-next-prev.png);
+                        background-repeat: no-repeat;
+                        display:block;
+                        width:12px;
+                        height:18px;
+                        overflow: hidden;
+                        text-indent: -9999px;
+                        float: left;
+                        margin-right:5px;
+                    }
+                    
+                    a.slidesjs-next {
+                        margin-right:10px;
+                        background-position: -12px 0;
+                    }
+                    
+                    a:hover.slidesjs-next {
+                        background-position: -12px -18px;
+                    }
+                    
+                    a.slidesjs-previous {
+                        background-position: 0 0;
+                    }
+                    
+                    a:hover.slidesjs-previous {
+                        background-position: 0 -18px;
+                    }
+                    
+                    a.slidesjs-play {
+                        width:15px;
+                        background-position: -25px 0;
+                    }
+                    
+                    a:hover.slidesjs-play {
+                        background-position: -25px -18px;
+                    }
+                    
+                    a.slidesjs-stop {
+                        width:18px;
+                        background-position: -41px 0;
+                    }
+                    
+                    a:hover.slidesjs-stop {
+                        background-position: -41px -18px;
+                    }
+                    
+                    .slidesjs-pagination {
+                        margin: 7px 0 0;
+                        float: right;
+                        list-style: none;
+                    }
+                    
+                    .slidesjs-pagination li {
+                        float: left;
+                        margin: 0 1px;
+                    }
+                    
+                    .slidesjs-pagination li a {
+                        display: block;
+                        width: 13px;
+                        height: 0;
+                        padding-top: 13px;
+                        background-image: url(images/pagination.png);
+                        background-position: 0 0;
+                        float: left;
+                        overflow: hidden;
+                    }
+                    
+                    .slidesjs-pagination li a.active,
+                    .slidesjs-pagination li a:hover.active {
+                        background-position: 0 -13px
+                    }
+                    
+                    .slidesjs-pagination li a:hover {
+                        background-position: 0 -26px
+                    }
+                    
+                    #slides a:link,
+                    #slides a:visited {
+                        color: #333
+                    }
+                    
+                    #slides a:hover,
+                    #slides a:active {
+                        color: #9e2020
+                    }
+                    
+                    .navbar {
+                        overflow: hidden
+                    }
+                    </style>
+                <!-- End SlidesJS Optional-->
+                
+                <style>
+                    #slides {
+                        display: none
+                    }
+                    
+                    .container {
+                        margin: 0 auto
+                    }
+                    
+                    
+                    </style>
+                
+                
+                <div id="slides" class=slidePhotos>
+                    <img src="images/H2D_level3.png" class=slidePhotos>
+                        <img src="images/Optimal.png" class=slidePhotos>
+                            <img src="images/Plume.png" class=slidePhotos>
+                                <img src="images/storage_cost_2.png" class=slidePhotos>
+                                    </div>
+                
+                
+                <script>
+                    $(document).ready(function(){
+                                      $("#slides").slidesjs({
+                                                            width: 100,
+                                                            height:80,
+                                                            play: {
+                                                            active:true,
+                                                            auto: true,
+                                                            swap: true
+                                                            }
+                                                            
+                                                            
+                                                            });
+                                      });
+                    
+                    </script>
+                <style>
+                    /* Prevents slides from flashing */
+                    .slidePhotos {
+                        width:100%;
+                        height: 100%;
+                    }
+                    </style>
+                
+                <!--end of pictures-->
+                
+            </td>
+            
+            <td width="70%">
+                <div class="contents">
+                    FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from \(\mathcal{O}(N^2)\) to \(\mathcal{O}(N)\) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a \(\mathcal{H}^2\) matrix. Matrix-vector products for hierarchical matrices are accelerated using the <a href="http://sivaramambikasaran.github.io/BBFMM2D/index.html">Black Box Fast Multipole Method</a> to accelerate these matrix-vector products.
+                    <br/>
+                    <!--Download-->
+                    <a href="https://github.com/sivaramambikasaran/BBFMM2D/tarball/master" class="button"><img src="images/downloadButton.jpeg" WIDTH=150 HEIGHT=80></a>
+                    <!--End of Download-->
+                    
+                </div><!-- contents -->
+            </td>
+            
+        </tr>
+    </table>
+
 
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
