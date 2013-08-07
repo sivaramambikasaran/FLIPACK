@@ -97,13 +97,41 @@ The files you have control over are the files inside the directory `./examples/`
     * To define your own kernel:  
       Modify `class myKernel`. 
     * To change input filename:  
-      The same step as described in 2.
+      The same step as described in 2.  
+      
+5. If you want to read matrix from binary file, and use standard kernel:
+ 
+    Go to `/examples`, open `"FLIPACK_binary_file_standard_kernel.cpp"`.  
+    * To change input filename:  
+      change the following lines in `main()`:  
+      `string filenameMetadata 		=   "../input/metadata.txt"`;  
+      `string filenameLocation 		= 	"../input/test_Location.bin"`;  
+      `string filenameH        		= 	"../input/test_H.bin"`;  
+      `string filenameX        		=   "../input/test_X.bin"`;  
+      `string filenameR        		=   "../input/test_R.bin"`;  
+      `string filenameMeasurement  =   "../input/test_Measurement.bin"`;  
+    * To use standard kernel:  
+     The same step as described in 1.
+     
+6. If you want to read matrix from binary file, and use your own kernel:  
 
+    Go to `/examples/`, open `"FLIPACK_binary_file_mykernel.cpp"`.  
+    * To change the input filename:  
+      The same step as described in 5.  
+    * To define your own kernel:  
+      Modify `class myKernel`.      
 
 
 ###INPUT FILES
 
-Go to `/input/`, you should put your own input file in the input folder.
+Go to `/input/`, you should put your own input files in the input folder.  
+**Donotes:**  
+
+	N: 					Number of unknowns  
+	m: 					Number of measurements  
+	p: 					Number of terms in the structure  
+	nMeasurementSet:	Number of measurement sets  
+####TEXT FILES
 
 The file format is described as follows:
 
@@ -134,7 +162,7 @@ The file format is described as follows:
 
     The first row should be like this:  
     
-    	Number of unknowns, Number of terms in the structure, Number of measurements, Number of measurement sets
+    	N, p, m, nMeasurementSet
 
     For example:
  
@@ -159,6 +187,24 @@ The file format is described as follows:
     	Rows of R  
     	Rows of measurements 
 
+####BINARY FILES
+
+You should have seperate binary files for each matrix, and a text file containing metadata:  
+
+1. A text file for meta data:  
+   The file format is:  
+   `N, p, m, nMeasurementSet`.  
+   For example:  
+   `3245,6,288,6`   
+2. A binary file for Location:
+
+	Elements are stored this way(row-wise):
+		
+		loc0.x loc0.y  
+		loc1.x loc1.y  
+		…
+3. Binary files for H matrix, X, R, Measurements respectively:  
+   The elements of each matrix should be stored in their own binary file row-wise. 
 
 ###RUNNING THE CODE:  
 
@@ -194,4 +240,14 @@ To run other .cpp files:
 3). `FLIPACK_input_from_file_mykernel.cpp`   
    key in:  
    
-   		make input_from_file_mykernel  
+   		make input_from_file_mykernel
+   	
+4). `FLIPACK_binary_file_mykernel.cpp`  
+   key in:  
+   
+        make binary_file_mykernel  
+        
+5). `FLIPACK_binary_file_standard_kernel.cpp`  
+   key in:  
+   
+        make binary_file_standard_kernel

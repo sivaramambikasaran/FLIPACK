@@ -63,7 +63,7 @@ int main(){
     MatrixXd Htranspose;        //  Transpose of the measurement operator;
     
     string filenameLocation = "../input/test_Location.bin";
-    string filenameH   = "../input/test_H.bin";      
+    string filenameH        = "../input/test_H.bin";      
     
     read_Location_Htranpose_binary(filenameLocation, N, location,  filenameH, m, Htranspose);
 
@@ -74,8 +74,8 @@ int main(){
     MatrixXd R;                 //  Covariance matrix;
     MatrixXd X;                 //  Structure of the mean;
     
-    string filenameX    =   "../input/test_X.bin";
-    string filenameR    =   "../input/test_R.bin";
+    string filenameX            =   "../input/test_X.bin";
+    string filenameR            =   "../input/test_R.bin";
     string filenameMeasurement  =   "../input/test_Measurement.bin";
     
     read_X_R_Measurements_Binary (filenameX, N, p, X, filenameR, m, R, filenameMeasurement, nMeasurementSets, measurements);
