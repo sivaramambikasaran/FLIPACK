@@ -91,7 +91,7 @@ int main(){
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
     
-    FLIPACK<kernel_Gaussian> A(location, Htranspose, X, measurements, R, nChebNode, &Atree);
+    FLIPACK<kernel_Gaussian> A(Htranspose, X, measurements, R, &Atree);
     
     A.get_Solution();
         
@@ -99,7 +99,7 @@ int main(){
     
     /****     If you want to use more than one kernels    ****/
     
-    /*FLIPACK<kernel_Logarithm> C(location, Htranspose, X, measurements, R, nChebNode, &Atree);
+    /*FLIPACK<kernel_Logarithm> C(Htranspose, X, measurements, R, &Atree);
      
      C.get_Solution();*/
     

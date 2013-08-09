@@ -22,7 +22,7 @@ template <typename T>
 class FLIPACK{
 public:
     //! Constructor of FLIPACK.
-    FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nChebNode, H2_2D_Tree*Atree);
+    FLIPACK(MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, H2_2D_Tree*Atree);
     /*! This function obtains the cross covariance.*/
     void get_QHtranspose();
     /*! This function obtains the measurement operator corrected covariance. */
@@ -57,14 +57,12 @@ private:
     MatrixXd X;
     MatrixXd measurements;
     MatrixXd R;
-    vector<Point> location;
     
     MatrixXd mainMatrix;
     
     
     bool computedQHtranspose, computedHQHtranspose, computedPsi, computedPhi, computedSolution, computedXi, computedBeta, computedVDiag, computedMainMatrix, computedIntermediateSolution;
     
-    unsigned short nChebNode;   /*!<  Number of Chebyshev nodes per dimension */
     unsigned long N;            /*!<  Number of unknowns */
     unsigned m;                 /*!<  Number of measurements */
     unsigned nMeasurementSets;  /*!<  Number of sets of measruements*/
@@ -82,13 +80,11 @@ private:
 
 
 template <typename T>
-FLIPACK<T>::FLIPACK(vector<Point>& location, MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, unsigned short nChebNode, H2_2D_Tree *Atree){
-    this->location          =   location;
+FLIPACK<T>::FLIPACK(MatrixXd& Htranspose, MatrixXd& X, MatrixXd& measurements, MatrixXd& R, H2_2D_Tree *Atree){
     this->Htranspose        =   Htranspose;
     this->X                 =   X;
     this->measurements      =   measurements;
     this->R                 =   R;
-    this->nChebNode         =   nChebNode;
     this->Atree             =   Atree;
     
     computedQHtranspose             =   false;
