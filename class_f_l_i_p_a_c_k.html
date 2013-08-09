@@ -103,7 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af72dad9b75014ec9bd09414bc443c5da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af72dad9b75014ec9bd09414bc443c5da"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_l_i_p_a_c_k.html#af72dad9b75014ec9bd09414bc443c5da">FLIPACK</a> (vector&lt; Point &gt; &amp;location, MatrixXd &amp;Htranspose, MatrixXd &amp;X, MatrixXd &amp;measurements, MatrixXd &amp;R, unsigned short <a class="el" href="class_f_l_i_p_a_c_k.html#a8379fbf2f7e534c7dbd2862de8e4b30a">nChebNode</a>, H2_2D_Tree *<a class="el" href="class_f_l_i_p_a_c_k.html#aaf7929271d7f2c98836e180694e13b7c">Atree</a>)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_l_i_p_a_c_k.html#af72dad9b75014ec9bd09414bc443c5da">FLIPACK</a> (MatrixXd &amp;Htranspose, MatrixXd &amp;X, MatrixXd &amp;measurements, MatrixXd &amp;R, H2_2D_Tree *<a class="el" href="class_f_l_i_p_a_c_k.html#aaf7929271d7f2c98836e180694e13b7c">Atree</a>)</td></tr>
 <tr class="memdesc:af72dad9b75014ec9bd09414bc443c5da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of <a class="el" href="class_f_l_i_p_a_c_k.html" title="Fast linear inversion package. ">FLIPACK</a>. <br/></td></tr>
 <tr class="separator:af72dad9b75014ec9bd09414bc443c5da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9bfa27bc2c48bf4c9ad2d912fea1197"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_l_i_p_a_c_k.html#ab9bfa27bc2c48bf4c9ad2d912fea1197">get_QHtranspose</a> ()</td></tr>
@@ -192,8 +192,6 @@ MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>measurements</b><
 <tr class="memitem:a57a40204c537ae730b0b255fe866c9f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57a40204c537ae730b0b255fe866c9f6"></a>
 MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>R</b></td></tr>
 <tr class="separator:a57a40204c537ae730b0b255fe866c9f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13ae641fb4bc265836d44c5db1016428"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13ae641fb4bc265836d44c5db1016428"></a>
-vector&lt; Point &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>location</b></td></tr>
 <tr class="separator:a13ae641fb4bc265836d44c5db1016428"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5717f2ce0905d34e87cdfe8f36dab4b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5717f2ce0905d34e87cdfe8f36dab4b0"></a>
 MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><b>mainMatrix</b></td></tr>
@@ -228,8 +226,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>computedMainMatrix</b
 <tr class="memitem:a3fc89f3942182df80cc3c61365d290dc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fc89f3942182df80cc3c61365d290dc"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>computedIntermediateSolution</b></td></tr>
 <tr class="separator:a3fc89f3942182df80cc3c61365d290dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8379fbf2f7e534c7dbd2862de8e4b30a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8379fbf2f7e534c7dbd2862de8e4b30a"></a>
-unsigned short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_l_i_p_a_c_k.html#a8379fbf2f7e534c7dbd2862de8e4b30a">nChebNode</a></td></tr>
 <tr class="memdesc:a8379fbf2f7e534c7dbd2862de8e4b30a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Chebyshev nodes per dimension. <br/></td></tr>
 <tr class="separator:a8379fbf2f7e534c7dbd2862de8e4b30a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e2c0ebc12895ae45feb28f6e1b3003d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e2c0ebc12895ae45feb28f6e1b3003d"></a>
