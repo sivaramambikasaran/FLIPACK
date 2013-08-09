@@ -26,7 +26,7 @@ Date: July 26th, 2013
 
 ###SETTING THINGS UP:
 
-1. To run this package, you need to have Eigen an **BBFMM2D**.
+1. To run this package, you need to have Eigen and **BBFMM2D**.
     * Set Eigen:
       
 	    1). Download Eigen from here: <http://eigen.tuxfamily.org/index.php?title=Main_Page> 
