@@ -83,7 +83,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><p>This is the first public release of the <a class="el" href="class_f_l_i_p_a_c_k.html" title="Fast linear inversion package. ">FLIPACK</a> library.</p>
 <p>Date: July 26th, 2013</p>
 <p><b>Version 3.1 - First external release.</b></p>
-<p>%% Copyleft 2013: Sivaram Ambikasaran, Ruoxi Wang, Peter Kitanidis and Eric Darve %% Developed by Sivaram Ambikasaran, Ruoxi Wang %% Contact: <a href="#" onclick="location.href='mai'+'lto:'+'siv'+'a.'+'198'+'5@'+'gma'+'il'+'.co'+'m'; return false;">siva.<span style="display: none;">.nosp@m.</span>1985<span style="display: none;">.nosp@m.</span>@gmai<span style="display: none;">.nosp@m.</span>l.co<span style="display: none;">.nosp@m.</span>m</a>(Sivaram) , <a href="#" onclick="location.href='mai'+'lto:'+'ruo'+'xi'+'@st'+'an'+'for'+'d.'+'edu'; return false;">ruoxi<span style="display: none;">.nosp@m.</span>@sta<span style="display: none;">.nosp@m.</span>nford<span style="display: none;">.nosp@m.</span>.edu</a> (Ruoxi) %% %% This program is free software; you can redistribute it and/or modify it under the terms of MPL2 license. %% The Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not %% distributed with this file, You can obtain one at <a href="http://mozilla.org/MPL/2.0/">http://mozilla.org/MPL/2.0/</a>.</p>
+<p>%% Copyleft 2013: Sivaram Ambikasaran, Ruoxi Wang, Peter Kitanidis and Eric Darve <br/>%% Developed by Sivaram Ambikasaran, Ruoxi Wang <br/>
+    %% Contact: <a href="#" onclick="location.href='mai'+'lto:'+'siv'+'a.'+'198'+'5@'+'gma'+'il'+'.co'+'m'; return false;">siva.<span style="display: none;">.nosp@m.</span>1985<span style="display: none;">.nosp@m.</span>@gmai<span style="display: none;">.nosp@m.</span>l.co<span style="display: none;">.nosp@m.</span>m</a>(Sivaram) , <a href="#" onclick="location.href='mai'+'lto:'+'ruo'+'xi'+'@st'+'an'+'for'+'d.'+'edu'; return false;">ruoxi<span style="display: none;">.nosp@m.</span>@sta<span style="display: none;">.nosp@m.</span>nford<span style="display: none;">.nosp@m.</span>.edu</a> (Ruoxi)<br/>
+    %% %% This program is free software; you can redistribute it and/or modify it under the terms of MPL2 license.<br/>
+    %% The Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not %% distributed with this file, You can obtain one at <a href="http://mozilla.org/MPL/2.0/">http://mozilla.org/MPL/2.0/</a>.</p>
 <h3>DIRECTORIES AND FILES:</h3>
 <pre class="fragment">./examples/     :   Example input C++ codes; Needed to read input from user or from input file.
 ./src/          :   Source code in C++
@@ -119,8 +122,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li><p class="startli">If you want to generate matrix through your own routine, and use the standard kernels:</p>
 <p class="startli">Go to <code>/examples/</code>, open <code>"FLIPACK_get_matrix_through_routine_standard_kernel.cpp"</code>.</p>
 <ul>
-<li>To generate matrix through routine: Change functions <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a4a496e550bece6f06f094428ae56a5e7" title="Get the location of the unknowns from the user;. ">get_Location()</a></code>, <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#afd12a639e11b72165f22dfdf87bb52f2" title="Get the measurement operator from the user;. ">get_Measurement_Operator()</a></code>, <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a954d95ad8a8d3f497b1417a1f7304fd9" title="Get the structure of the mean;. ">get_X()</a></code> and <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a5638027c2e49163d982a37ec4c44e5c5" title="Get the number of Chebyshev nodes in one direction;. ">get_nChebNode()</a></code>.</li>
-<li>To use standard kernels: Select the kernel type in <code>main()</code>. Options of kernels: <pre class="fragment">  LOGARITHM:          kernel_Logarithm  
+<li>To generate matrix through routine: <br/>
+    Change functions <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a4a496e550bece6f06f094428ae56a5e7" title="Get the location of the unknowns from the user;. ">get_Location()</a></code>, <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#afd12a639e11b72165f22dfdf87bb52f2" title="Get the measurement operator from the user;. ">get_Measurement_Operator()</a></code>, <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a954d95ad8a8d3f497b1417a1f7304fd9" title="Get the structure of the mean;. ">get_X()</a></code> and <code><a class="el" href="_f_l_i_p_a_c_k__get__matrix__through__routine__mykernel_8cpp.html#a5638027c2e49163d982a37ec4c44e5c5" title="Get the number of Chebyshev nodes in one direction;. ">get_nChebNode()</a></code>.</li>
+<li>To use standard kernels:<br/>
+    Select the kernel type in <code>main()</code>.<br/>
+    Options of kernels: <pre class="fragment">  LOGARITHM:          kernel_Logarithm
   ONEOVERR2:          kernel_OneOverR2  
   GAUSSIAN:           kernel_Gaussian  
   QUADRIC:            kernel_Quadric  
@@ -146,15 +152,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li><p class="startli">If you want to generate matrix through your own routine, and use your own kernel:</p>
 <p class="startli">Go to <code>/examples/</code>, open <code>"FLIPACK_get_matrix_through_routine_mykernel.cpp"</code>.</p>
 <ul>
-<li>To define your own kernel: Modify <code>class <a class="el" href="classmy_kernel.html" title="Deifne user&#39;s own kernel. ">myKernel</a></code>.</li>
-<li>To generate your matrix: The same step as described in 1.</li>
+<li>To define your own kernel: <br/>
+    Modify <code>class <a class="el" href="classmy_kernel.html" title="Deifne user&#39;s own kernel. ">myKernel</a></code>.</li>
+<li>To generate your matrix: <br/>
+    The same step as described in 1.</li>
 </ul>
 </li>
 <li><p class="startli">If you want to read matrix from file, and use your own kernel:</p>
 <p class="startli">Go to <code>/examples/</code>, open <code>"FLIPACK_input_from_file_mykernel.cpp"</code>.</p>
 <ul>
-<li>To define your own kernel: Modify <code>class <a class="el" href="classmy_kernel.html" title="Deifne user&#39;s own kernel. ">myKernel</a></code>.</li>
-<li>To change input filename: The same step as described in 2.</li>
+<li>To define your own kernel: <br/>
+    Modify <code>class <a class="el" href="classmy_kernel.html" title="Deifne user&#39;s own kernel. ">myKernel</a></code>.</li>
+<li>To change input filename: <br/>
+    The same step as described in 2.</li>
 </ul>
 </li>
 <li><p class="startli">If you want to read matrix from binary file, and use standard kernel:</p>
@@ -175,8 +185,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li><p class="startli">If you want to read matrix from binary file, and use your own kernel:</p>
 <p class="startli">Go to <code>/examples/</code>, open <code>"FLIPACK_binary_file_mykernel.cpp"</code>.</p>
 <ul>
-<li>To change the input filename: The same step as described in 5.</li>
-<li>To define your own kernel: Modify <code>class <a class="el" href="classmy_kernel.html" title="Deifne user&#39;s own kernel. ">myKernel</a></code>.</li>
+<li>To change the input filename:<br/>
+    The same step as described in 5.</li>
+<li>To define your own kernel:<br/>
+    Modify <code>class <a class="el" href="classmy_kernel.html" title="Deifne user&#39;s own kernel. ">myKernel</a></code>.</li>
 </ul>
 </li>
 </ol>
