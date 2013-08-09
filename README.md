@@ -200,7 +200,7 @@ You should have seperate binary files for each matrix, and a text file containin
  
    The file format is:  
    
-   		N, p, m, nMeasurementSet.  
+   		N, p, m, nMeasurementSet  
    For example:  
    
    		3245,6,288,6  

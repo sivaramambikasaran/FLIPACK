@@ -70,4 +70,4 @@ clean:
 	rm -rf *.out examples/*.o exec/* src/*.o ./../BBFMM2D/src/*.o
 
 tar:
-	tar -zcvf FLIPACK.tar.gz ./exec ./src ./header ./examples ./Makefile ./README ./LICENSE
+	tar -zcvf FLIPACK.tar.gz ./exec ./src ./header ./examples ./Makefile ./README.md ./LICENSE.md
