@@ -389,23 +389,20 @@ You can use our examples with your own input.
     Go to the folder `/input/`, put your input file inside of this folder. 
      
     Go to the folder `/examples/`, open `"FLIPACK_textfile_standard_kernel.cpp"`.
-    
-    * To change input filename:  
+     * To change input filename:  
     
       change the two lines in `main()`:  
       
       		string filename_location_Htranpose = "./../input/test_Location_H.txt";  
       		string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt";
       		
-    * To use standard kernels:  
-    
+    * To use standard kernels:   
       The same step as described in 1.
 
 
 3. If you want to generate input through your own routine, and use your own kernel:
 
     Go to `/examples/`, open `"FLIPACK_get_matrix_through_routine_mykernel.cpp"`.
-    
     * To define your own kernel:  
       Modify `class myKernel`. 
     * To generate your input:  
@@ -414,7 +411,6 @@ You can use our examples with your own input.
 4. If you want to read input from text file, and use your own kernel:
 
     Go to `/examples/`, open `"FLIPACK_textfile_mykernel.cpp"`.
-    
     * To define your own kernel:  
       Modify `class myKernel`. 
     * To change input filename:  
@@ -423,7 +419,6 @@ You can use our examples with your own input.
 5. If you want to read input from binary file, and use standard kernel:
  
     Go to `/examples`, open `"FLIPACK_binary_file_standard_kernel.cpp"`. 
-     
     * To change input filename:  
       change the following lines in `main()`:  
       
@@ -441,7 +436,6 @@ You can use our examples with your own input.
 6. If you want to read input from binary file, and use your own kernel:  
 
     Go to `/examples/`, open `"FLIPACK_binary_file_mykernel.cpp"`.  
-    
     * To change the input filename:  
       The same step as described in 5.  
     * To define your own kernel:  
