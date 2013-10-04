@@ -374,28 +374,22 @@ This first argument is the filename for your output data. The second argument is
 We have provided several examples for FLIPACK. Go to examples/, read through the files both must be self explanatory for the most part.
 You can use our examples with your own input.
 
-1. If you want to generate input through your own routine, and use the standard kernels:  
-
+1. If you want to generate input through your own routine, and use the standard kernels:    
     Go to `/examples/`, open `"FLIPACK_get_matrix_through_routine_standard_kernel.cpp"`.  
-    
     * To generate input through routine:   
       Change functions `get_Location()`, `get_Measurement_Operator()`, `get_X()` and `get_nChebNode()`.
     * To use standard kernels:   
       Choose the kernel type in `main()`, options of kernels are in **3.2.2**
 
 	
-2. If you want to read input from file, and use standard kernels:
-
+2. If you want to read input from text file, and use standard kernels:  
     Go to the folder `/input/`, put your input file inside of this folder. 
-     
     Go to the folder `/examples/`, open `"FLIPACK_textfile_standard_kernel.cpp"`.
      * To change input filename:  
-    
       change the two lines in `main()`:  
       
       		string filename_location_Htranpose = "./../input/test_Location_H.txt";  
       		string filename_X_R_Measurements = "./../input/test_X_R_Measurements.txt";
-      		
     * To use standard kernels:   
       The same step as described in 1.
 
@@ -428,7 +422,6 @@ You can use our examples with your own input.
       		string filenameX        		=   "../input/test_X.bin";  
       		string filenameR        		=   "../input/test_R.bin";  
       		string filenameMeasurement  	=   "../input/test_Measurement.bin"; 
-      		 
     * To use standard kernel:  
     
      The same step as described in 1.
