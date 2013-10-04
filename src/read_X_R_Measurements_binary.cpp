@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, unsigned short p,MatrixXd& X,const string& filenameR, unsigned m, MatrixXd& R,const string& filenameMeasurementSets, unsigned nMeasurementSets, MatrixXd& measurements) {
+void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, unsigned short p,double*& X,const string& filenameR, unsigned m, double*& R,const string& filenameMeasurement, unsigned nMeasurementSets, double*& measurements) {
     ifstream fin;
     /* Read X */
 	fin.open(filenameX.c_str(),ios::binary);
@@ -21,8 +21,7 @@ void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, uns
 		cerr << "Failed to open file " << filenameX << endl;
 		throw runtime_error("Failed to open file!");
 	}
-    X.resize(N,p);
-    fin.read((char*) X.data(), N*p*sizeof(double));
+    fin.read((char*) X, N*p*sizeof(double));
     fin.close();
     
     /* Read R */
@@ -32,19 +31,17 @@ void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, uns
 		cerr << "Failed to open file " << filenameR << endl;
 		throw runtime_error("Failed to open file!");
 	}
-    R.resize(m,m);
-    fin.read((char*) R.data(), m*m*sizeof(double));
+    fin.read((char*) R, m*m*sizeof(double));
     fin.close();
     
     /* Read Measurements */
-    fin.open(filenameMeasurementSets.c_str(),ios::binary);
+    fin.open(filenameMeasurement.c_str(),ios::binary);
     
 	if (!fin.good()){
-		cerr << "Failed to open file " << filenameMeasurementSets << endl;
+		cerr << "Failed to open file " << filenameMeasurement << endl;
 		throw runtime_error("Failed to open file!");
 	}
-    measurements.resize(m,nMeasurementSets);
-    fin.read((char*) measurements.data(), m*nMeasurementSets*sizeof(double));
+    fin.read((char*) measurements, m*nMeasurementSets*sizeof(double));
     fin.close();
 }
 
