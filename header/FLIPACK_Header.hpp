@@ -15,6 +15,8 @@
 #include"read_metadata_FLIPACK.hpp"
 #include"read_X_R_Measurements_binary.hpp"
 #include"read_X_R_Measurements.hpp"
+#include"BBFMM2D.hpp"
+#include"environment.hpp"
 
 
 
