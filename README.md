@@ -118,17 +118,17 @@ This example first build a fmm tree with this line:
 where H2_2D_Tree is a class of fmm tree, the constructor takes 5 arguments:  
 
 * nChebNodes(unsigned short):   
-	Number of Chebyshev nodes per dimension. It should take value $\ge$ 3, and we recommend to take value from 3 to 10. (Larger number of Chebyshev nodes would give better result but with much more time)
+	Number of Chebyshev nodes per dimension. The value should be at least 3, and we recommend to take value from 3 to 10. (Larger number of Chebyshev nodes would give better result but with much more time)
 * charges(double*):   
-	All the different sets of charges. This pointer should point to an array with size $N \times m$, and the data should be stored in column-wise. ( i.e. first set of charges, followd by second set of charges, etc)
+	All the different sets of charges. This pointer should point to an array with size N x m, and the data should be stored in column-wise. ( i.e. first set of charges, followd by second set of charges, etc)
 * location(vector<Point>):  
-	Locations of the charges in $2D$ domain. Here Point is a structure type with $x$ and $y$ coordinate defined.  
+	Locations of the charges in 2D domain. In BBFMM2D, we assume here that observation points are the same as locations of sources. Here Point is a structure type with x and y coordinate defined.  
 * N(unsigned long):  
 	Number of charges.  
 * m(unsigned):  
 	Number of sets of charges.  
 	
-Once you have built the FMM tree, you can solve the linear inversion problem with as many kernels as you want. This code shows an example using Gaussian kernel:  
+Once you have built the FMM tree, you can solve the linear inversion problem with as many kernels as you want.( see **3.2.4** ) This code shows an example using Gaussian kernel:  
 
 	FLIPACK<kernel_Gaussian> A(Htranspose, X, measurements, R, N, m, p, nMeasurementSets, &Atree);
 	double* solution;
@@ -167,7 +167,7 @@ Here `get_Solution(solution)`is a method of FLIPACK. The unknown is stored colum
 
 #####4.2.2 Options of provided kernels  
 We have provided several standard kernels:  
-The entries of the covariance matrix are given by <img src="http://latex.codecogs.com/svg.latex?  $Q_{ij} = k(x_i, y_i )$ " border="0"/>, where <img src="http://latex.codecogs.com/svg.latex?  $x_i$ " border="0"/> and <img src="http://latex.codecogs.com/svg.latex?  $y_i$ " border="0"/> are locations of points. Below are the details of the kernel functions we have provided:
+The entries of the covariance matrix are given by <img src="http://latex.codecogs.com/svg.latex?  $Q_{ij} = k(x_i, y_i )$ " border="0"/>, where <img src="http://latex.codecogs.com/svg.latex?  $x_i$ " border="0"/> and <img src="http://latex.codecogs.com/svg.latex?  $y_i$ " border="0"/> denote locations of points(particles). Let  <img src="http://latex.codecogs.com/svg.latex?  $r_{ij}$ " border="0"/> be the Euclidean distance between  <img src="http://latex.codecogs.com/svg.latex?  $x_i$ " border="0"/> and <img src="http://latex.codecogs.com/svg.latex?  $y_i$ " border="0"/>.   Below are the details of the kernel functions we have provided:
 
 Options of kernels:  
 
@@ -180,26 +180,28 @@ Options of kernels:
 * ONEOVERR2 kernel:  
 	usage: kernel_OneOverR  
 	kernel function:  
-    <img src="http://latex.codecogs.com/svg.latex?  $k(x,y) = 1 / r^2 \,(r \neq 0);\, k(x,y)= 0 \,(r=0)$. (r = |x-y|)" border="0"/>   
+    <img src="http://latex.codecogs.com/svg.latex?  $k(x,y) = 1 / r^2 \,(r \neq 0);\, k(x,y)= 0 \,(r=0)$." border="0"/>   
 	
 * GAUSSIAN kernel:  
 	usage: kernel_Gaussian  
 	kernel function:  
-	<img src="http://latex.codecogs.com/svg.latex? $k(x,y) = exp(-r^2)$. (r = |x-y|)" border="0"/>   
+	<img src="http://latex.codecogs.com/svg.latex? $k(x,y) = exp(-r^2)$." border="0"/>   
 	
 * QUADRIC kernel:  
 	usage: kernel_Quadric  
 	kernel function:  
-	 <img src="http://latex.codecogs.com/svg.latex? $ k(x,y) = 1 + r^2$. (r = |x-y|)" border="0"/>   
+	 <img src="http://latex.codecogs.com/svg.latex? $ k(x,y) = 1 + r^2$." border="0"/>   
 
 * INVERSEQUADRIC kernel:  
 	usage: kernel_InverseQuadric  
-	kernel function:  
-	 <img src="http://latex.codecogs.com/svg.latex? $k(x,y) = 1 / (1+r^2)$. (r = |x-y|)" border="0"/> 
+	kernel function:	  
+	 <img src="http://latex.codecogs.com/svg.latex? $k(x,y) = 1 / (1+r^2)$." border="0"/> 
 	
 * THINPLATESPLINE kernel:  
 	usage:  kernel_ThinPlateSpline  
-	kernel function:   <img src="http://latex.codecogs.com/svg.latex? $k(x,y) =  0.5 \times r^2 \times log(r^2 )\, (r \neq 0);\, k(x,y)=0\,(r=0). (r = |x-y|)$" border="0"/>    		
+	kernel function:  
+   <img src="http://latex.codecogs.com/svg.latex? $k(x,y) =  0.5 \times r^2 \times log(r^2 )\, (r \neq 0);\, k(x,y)=0\,(r=0).$" border="0"/>
+	
 If you want to define your own kernel, please see **4.2.3**.  
 
 #####4.2.3 FLIPACK with user defined kernels
@@ -408,10 +410,10 @@ For each line, it should be a row of one of these matrices(X,R,measuremtns). And
 This first argument is the filename for your output data. The second argument is a pointer to the output data, and the last argument is the number of elements in the array of your output data.
 
 ###6. EXAMPLES
-####6.1 Chage input of examples
-
 We have provided several examples for FLIPACK. Go to examples/, read through the files both must be self explanatory for the most part.
 You can use our examples with your own input.
+
+####6.1 Chage input of examples
 
 1. If you want to generate input through your own routine, and use the standard kernels:    
     Go to `/examples/`, open `"FLIPACK_get_matrix_through_routine_standard_kernel.cpp"`.  
