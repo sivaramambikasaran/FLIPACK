@@ -18,8 +18,6 @@ using namespace Eigen;
 using namespace std;
 
 
-void read_X_R_Measurements (const string& filename, unsigned long &N, unsigned short& p, unsigned& m, unsigned& nMeasurementSets, MatrixXd& X, MatrixXd& R, MatrixXd& measurements);
-
-void read_Matrix_By_Line(const string& s, unsigned long row, MatrixXd& M, unsigned m);
+void read_X_R_Measurements (const string& filename, unsigned long N, unsigned short p, unsigned m, unsigned nMeasurementSets, double* X, double* R, double* measurements);
 
 #endif //(__read_X_R_Measurements_hpp__)

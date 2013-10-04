@@ -18,7 +18,7 @@ using namespace Eigen;
 using namespace std;
 
 
-void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, unsigned short p,MatrixXd& X,const string& filenameR, unsigned m, MatrixXd& R,const string& filenameMeasurement, unsigned nMeasurementSets, MatrixXd& measurements);
+void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, unsigned short p,double*& X,const string& filenameR, unsigned m, double*& R,const string& filenameMeasurement, unsigned nMeasurementSets, double*& measurements);
 
 
 #endif //(__read_X_R_Measurements_binary_hpp__)

@@ -11,8 +11,10 @@
 #include"read_X_R_Measurements.hpp"
 
 
+void read_By_Line(const string& s, unsigned long row, double* data, unsigned numRows, unsigned numCols);
 
-void read_X_R_Measurements (const string& filename, unsigned long &N, unsigned short& p, unsigned& m, unsigned& nMeasurementSets, MatrixXd& X, MatrixXd& R, MatrixXd& measurements) {
+
+void read_X_R_Measurements (const string& filename, unsigned long N, unsigned short p, unsigned m, unsigned nMeasurementSets, double* X, double* R, double* measurements) {
     ifstream fin;
 	fin.open(filename.c_str());
     
@@ -20,35 +22,25 @@ void read_X_R_Measurements (const string& filename, unsigned long &N, unsigned s
 		cerr << "Failed to open file " << filename << endl;
 		throw runtime_error("Failed to open file!");
 	}
-    // read first line in the file : N, p, m, measurementsets
+    
     string line;
-    getline(fin,line);
-    line.erase(remove(line.begin(), line.end(), ' '),
-               line.end());
-    stringstream ss;
-    ss << line;
-    char comma;
-    ss >> N >> comma >> p >> comma >> m >> comma >> nMeasurementSets;
-    X               =   MatrixXd::Zero(N,p);
-    R               =   MatrixXd::Zero(m,m);
-    measurements    =   MatrixXd::Zero(m,nMeasurementSets);
     unsigned long row = 0;
     while(getline(fin, line)){
         line.erase(remove(line.begin(), line.end(), ' '),
                    line.end());
         if (row < N) {
-            read_Matrix_By_Line(line, row, X, p);
+            read_By_Line(line, row, X, N, p);
         }else if (row < N+m) {
-            read_Matrix_By_Line(line, row-N, R, m);
+            read_By_Line(line, row-N, R, m, m);
         }else {
-            read_Matrix_By_Line(line, row-N-m, measurements, nMeasurementSets);
+            read_By_Line(line, row-N-m, measurements, m, nMeasurementSets);
         }
         row++;
     }
     fin.close();
 }
 
-void read_Matrix_By_Line(const string& s, unsigned long row, MatrixXd& M, unsigned m) {
+void read_By_Line(const string& s, unsigned long row, double* data, unsigned numRows, unsigned numCols) {
     if (!s.empty()) {
         unsigned k = 0;
         const char* start_pt = NULL;
@@ -59,14 +51,14 @@ void read_Matrix_By_Line(const string& s, unsigned long row, MatrixXd& M, unsign
                     i++;
                 }
                 if(start_pt!=&s[i]) {
-                    M(row,k)=(double)atof(start_pt);
+                    data[k*numRows+row]=(double)atof(start_pt);
                 }
                 k++;
             }
             else {
                 i++;
             }
-        if(k!=m)
+        if(k!=numCols)
             throw runtime_error("Number of measurement is not consistent with input");
     }
 }
