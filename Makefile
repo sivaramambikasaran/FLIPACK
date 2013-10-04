@@ -1,15 +1,15 @@
 CC=g++
 CFLAGS=-c -Wall -DNDEBUG -O3 -ffast-math -ffinite-math-only -I ./header/ -I ./../BBFMM2D/header/ -I ./../../ 
 LDFLAGS=
-SOURCES= ./../BBFMM2D/src/H2_2D_Node.cpp ./../BBFMM2D/src/H2_2D_Tree.cpp ./../BBFMM2D/src/kernel_Base.cpp ./../BBFMM2D/src/kernel_Types.cpp 
+SOURCES= ./../BBFMM2D/src/H2_2D_Node.cpp ./../BBFMM2D/src/H2_2D_Tree.cpp ./../BBFMM2D/src/kernel_Base.cpp ./../BBFMM2D/src/kernel_Types.cpp ./src/read_metadata_FLIPACK.cpp ../BBFMM2D/src/write_Into_Binary_File.cpp
 
-SOURCESTXT=./src/read_X_R_Measurements.cpp ./../BBFMM2D/src/read_Location_H.cpp
+SOURCESTXT=./src/read_X_R_Measurements.cpp ./../BBFMM2D/src/read_Location_Charges.cpp
 
-SOURCESBINARY=./src/read_metadata_FLIPACK.cpp ./src/read_X_R_Measurements_binary.cpp ../BBFMM2D/src/read_Location_Htranpose_binary.cpp
+SOURCESBINARY= ./src/read_X_R_Measurements_binary.cpp ../BBFMM2D/src/read_Location_Charges_binary.cpp 
 
-SOURCESA=examples/FLIPACK_input_from_file_standard_kernel.cpp
+SOURCESA=examples/FLIPACK_textfile_standard_kernel.cpp
 SOURCESB=examples/FLIPACK_get_matrix_through_routine_standard_kernel.cpp 
-SOURCESC=examples/FLIPACK_input_from_file_mykernel.cpp
+SOURCESC=examples/FLIPACK_textfile_mykernel.cpp
 SOURCESD=examples/FLIPACK_get_matrix_through_routine_mykernel.cpp
 SOURCESE=examples/FLIPACK_binary_file_standard_kernel.cpp
 SOURCESF=examples/FLIPACK_binary_file_mykernel.cpp
@@ -23,14 +23,14 @@ OBJECTSE=$(SOURCES:.cpp=.o) $(SOURCESE:.cpp=.o) $(SOURCESBINARY:.cpp=.o)
 OBJECTSF=$(SOURCES:.cpp=.o) $(SOURCESF:.cpp=.o) $(SOURCESBINARY:.cpp=.o)
 
 
-EXECUTABLEA=./exec/FLIPACK_input_from_file_standard_kernel
+EXECUTABLEA=./exec/FLIPACK_textfile_standard_kernel
 EXECUTABLEB=./exec/FLIPACK_get_matrix_through_routine_standard_kernel
-EXECUTABLEC=./exec/FLIPACK_input_from_file_mykernel
+EXECUTABLEC=./exec/FLIPACK_textfile_mykernel
 EXECUTABLED=./exec/FLIPACK_get_matrix_through_routine_mykernel
 EXECUTABLEE=./exec/FLIPACK_binary_file_standard_kernel
 EXECUTABLEF=./exec/FLIPACK_binary_file_mykernel
 
-input_from_file_standard_kernel: $(SOURCES) $(SOURCESTXT) $(SOURCESA) $(EXECUTABLEA)
+textfile_standard_kernel: $(SOURCES) $(SOURCESTXT) $(SOURCESA) $(EXECUTABLEA)
 
 $(EXECUTABLEA): $(OBJECTSA)
 	$(CC) $(LDFLAGS) $(KERNEL) $(INDEX) $(OBJECTSA) -o $@
@@ -42,7 +42,7 @@ $(EXECUTABLEB): $(OBJECTSB)
 	$(CC) $(LDFLAGS) $(KERNEL) $(INDEX) $(OBJECTSB) -o $@
 
 
-input_from_file_mykernel: $(SOURCES) $(SOURCESTXT) $(SOURCESC) $(EXECUTABLEC)
+textfile_mykernel: $(SOURCES) $(SOURCESTXT) $(SOURCESC) $(EXECUTABLEC)
 
 $(EXECUTABLEC): $(OBJECTSC)
 	$(CC) $(LDFLAGS) $(KERNEL) $(INDEX) $(OBJECTSC) -o $@
