@@ -7,14 +7,11 @@
  */
 /*! \file	FLIPACK_binary_file_mykernel.cpp
  Input type: Binary file;
- Kernel type: kernel defined by user..
-
+ Kernel type: kernel defined by user.
 */
 
-#include"environment.hpp"
-#include"FLIPACK_Header.hpp"
-#include"BBFMM2D.hpp"
 
+#include"FLIPACK_Header.hpp"
 
 
 using namespace std;
@@ -26,7 +23,8 @@ public:
     virtual double kernel_Func(Point r0, Point r1){
         //implement your own kernel here
         double rSquare	=	(r0.x-r1.x)*(r0.x-r1.x) + (r0.y-r1.y)*(r0.y-r1.y);
-        return exp(-rSquare);
+        return exp(-pow(pow(rSquare,0.5)/900.0,0.5));
+;
     }
 };
 
@@ -40,6 +38,7 @@ int main(){
     cout << endl << "INITIALIZING THE PROBLEM..." << endl;
 
     clock_t start   =   clock();
+    
     /*******            Getting metadata          *******/
     
     unsigned long N;            //  Number of unknowns;
@@ -60,19 +59,24 @@ int main(){
     /*******    Getting location and Htranspose   *******/
 
     vector<Point> location;     //  Location of the unknowns;
-    MatrixXd Htranspose;        //  Transpose of the measurement operator;
+    double* Htranspose;         //  Transpose of the measurement operator;
     
-    string filenameLocation = "../input/test_Location.bin";
-    string filenameH        = "../input/test_H.bin";      
+    string filenameLocation    = "../input/test_Location.bin";
+    string filenameHtranspose  = "../input/test_Htranspose.bin";
     
-    read_Location_Htranpose_binary(filenameLocation, N, location,  filenameH, m, Htranspose);
+    Htranspose =   new double[N*m];
+    
+    read_Location_Charges_binary(filenameLocation, N, location,  filenameHtranspose, m, Htranspose);
 
 
     /*******     Getting X, R and measurements     *******/
     
-    MatrixXd measurements;      //  Actual measurements;
-    MatrixXd R;                 //  Covariance matrix;
-    MatrixXd X;                 //  Structure of the mean;
+    double* measurements;  //  Actual measurements;
+    double* R;             //  Covariance matrix;
+    double* X;             //  Structure of the mean;
+    measurements = new double[m*nMeasurementSets];
+    R            = new double[m*m];
+    X            = new double[N*p];
     
     string filenameX            =   "../input/test_X.bin";
     string filenameR            =   "../input/test_R.bin";
@@ -96,14 +100,14 @@ int main(){
     
     /**********************************************************/
     /*                                                        */
-    /*                 Fast Linear inversion                  */
+    /*                 Fast Linear Inversion                  */
     /*                                                        */
     /**********************************************************/
     
     cout << endl << "PERFORMING FAST LINEAR INVERSION..." << endl;
     
     start   =   clock();
-    H2_2D_Tree Atree(nChebNode, Htranspose, location);// Build the fmm tree;
+    H2_2D_Tree Atree(nChebNode, Htranspose, location, N, m);// Build the fmm tree;
     /* Options of kernel:
      LOGARITHM:          kernel_Logarithm
      ONEOVERR2:          kernel_OneOverR2
@@ -113,25 +117,29 @@ int main(){
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
     
-    FLIPACK<myKernel> A(Htranspose, X, measurements, R, &Atree);
-    
-    A.get_Solution();
+    FLIPACK<myKernel> A(Htranspose, X, measurements, R, N, m, p, nMeasurementSets, &Atree);
+    double* solution;
+    A.get_Solution(solution);
         
     end   =   clock();
     
     /****     If you want to use more than one kernels    ****/
-    
-    /*FLIPACK<kernel_Logarithm> C(Htranspose, X, measurements, R, &Atree);
+
+    /*FLIPACK<kernel_Gaussian> C(Htranspose, X, measurements, R, N, m, p, nMeasurementSets, &Atree);
      
-     C.get_Solution();*/
+     C.compute_Solution();*/
     
     double timeFastMethod =   double(end-start)/double(CLOCKS_PER_SEC);
 
     cout << endl << "Time taken for the fast method is: " << timeFastMethod << endl;
-
+    
+    /****           write data into binary file          ****/
+    string outputfilename = "../output/result.bin";    
+    write_Into_Binary_File(outputfilename, solution, N*nMeasurementSets);
+    
     /**********************************************************/
     /*                                                        */
-    /*              Conventional Linear inversion             */
+    /*              Conventional Linear Inversion             */
     /*                                                        */
     /**********************************************************/
 
@@ -141,31 +149,47 @@ int main(){
     
     MatrixXd Q;
     
-    kernel_Gaussian B; // Make sure the type of B here
-                       // corresponds to the kernel used
-                       // to generate Q.
+    myKernel B; // Make sure the type of B here
+                // corresponds to the kernel used
+                // to generate Q.
     
     B.kernel_2D(N, location, N, location, Q);
     
+    MatrixXd Htranspose_    =  Map<MatrixXd>(Htranspose, N, m);
+    MatrixXd R_             =  Map<MatrixXd>(R, m, m);
+    MatrixXd X_             =  Map<MatrixXd>(X, N, p);
+    MatrixXd measurements_  =  Map<MatrixXd>(measurements, m, nMeasurementSets);
+
+
+
     MatrixXd temp(m+p,m+p);
-    temp.block(0,0,m,m) =   Htranspose.transpose()*Q*Htranspose+R;
-    temp.block(0,m,m,p) =   Htranspose.transpose()*X;
-    temp.block(m,0,p,m) =   X.transpose()*Htranspose;
+    temp.block(0,0,m,m) =   Htranspose_.transpose()*Q*Htranspose_+R_;
+    temp.block(0,m,m,p) =   Htranspose_.transpose()*X_;
+    temp.block(m,0,p,m) =   X_.transpose()*Htranspose_;
     temp.block(m,m,p,p) =   MatrixXd::Zero(p,p);
     
 
     MatrixXd temprhs(m+p,nMeasurementSets);
-    temprhs.block(0,0,m,nMeasurementSets)   =   measurements;
+    temprhs.block(0,0,m,nMeasurementSets)   =   measurements_;
     temprhs.block(m,0,p,nMeasurementSets)   =   MatrixXd::Zero(p,nMeasurementSets);
     MatrixXd tempSolution   =   temp.fullPivLu().solve(temprhs);
 
-    MatrixXd finalSolution  =   X*tempSolution.block(m,0,p,nMeasurementSets)+Q*Htranspose*tempSolution.block(0,0,m,nMeasurementSets);
+    MatrixXd finalSolution  =   X_*tempSolution.block(m,0,p,nMeasurementSets)+Q*Htranspose_*tempSolution.block(0,0,m,nMeasurementSets);
 
     end   =   clock();
     
     double  timeExactMethod    =   double(end-start)/double(CLOCKS_PER_SEC);
     
+    MatrixXd solution_ =   Map<MatrixXd>(solution, N, nMeasurementSets);
+    
     cout << endl << "Time taken for the exact method is: " << timeExactMethod << endl;
     
-    cout << endl << "Relative difference between the fast and conventional solution is: " << (finalSolution-A.Solution).norm()/finalSolution.norm() << endl << endl;
+    cout << endl << "Relative difference between the fast and conventional solution is: " << (finalSolution-solution_).norm()/finalSolution.norm() << endl << endl;
+    
+    /*******        Clean Up        *******/
+    
+    delete [] Htranspose;
+    delete [] measurements;
+    delete [] R;
+    delete [] X;
 }

@@ -18,32 +18,51 @@
 using namespace std;
 using namespace Eigen;
 
+void get_Metadata(unsigned long& N, unsigned& m, unsigned& nMeasurementSets,unsigned short &p) {
+    N = 5000;
+    m = 10;
+    nMeasurementSets = 5;
+    p = 6;
+}
+
 /*!  Get the location of the unknowns from the user;*/
-void get_Location(unsigned long& N, vector<Point>& location){
-	N           =	5000;
-	VectorXd tmp1	=	VectorXd::Random(N);
-	VectorXd tmp2	=	VectorXd::Random(N);
+void get_Location(unsigned long N, vector<Point>& location){
     for (unsigned long i = 0; i < N; i++) {
-        Point newPoint;
-        newPoint.x =   tmp1[i];
-        newPoint.y =   tmp2[i];
+        double x = rand() % 10 - 5;
+        double y = rand() % 10 - 5;
+        Point newPoint(x,y);
         location.push_back(newPoint);
     }
 }
 
 /*! Get the measurement operator from the user; */
-void get_Measurement_Operator(const unsigned long N, unsigned& m, unsigned& nMeasurementSets, MatrixXd& Htranspose, MatrixXd& measurements, MatrixXd& R){
-	m               =	10;                                     //	Number of measurements;
-    nMeasurementSets=   5;                                      //  Number of measurement sets;
-	Htranspose      =	MatrixXd::Random(N,m);                  //  Transpose of the measurement operator;
-    measurements    =   MatrixXd::Random(m,nMeasurementSets);   //  Set of measurements;
-    R               =   MatrixXd::Identity(m,m);                //  Covariance of the measurements;
+void get_Measurement_Operator(const unsigned long N, unsigned& m, unsigned& nMeasurementSets, double*& Htranspose, double*& measurements, double*& R){
+    //  Transpose of the measurement operator(stored column wise)
+    for (unsigned int i = 0; i < N*m; i++) {
+        Htranspose[i]  =   rand() % 3 - 1;
+    }
+    //  Set of measurements(stored column wise)
+    for (unsigned int i = 0; i < m*nMeasurementSets; i++) {
+        measurements[i] = rand() % 3 - 1;
+    }
+    //  Covariance of the measurements(stored column wise)
+    for (unsigned int i = 0; i < m; i++) {
+        for (unsigned int j = 0; j < m; j++) {
+            if (i==j) {
+                R[i*m+j] = 1;
+            }else {
+                R[i*m+j] = 0;
+            }
+        }
+    }
 }
 
 /*!  Get the structure of the mean;*/
-void get_X(unsigned const N, unsigned short& p, MatrixXd& X){
+void get_X(unsigned const N, unsigned short& p, double*& X){
     p   =   6;
-    X   =   MatrixXd::Random(N,p);
+    for (unsigned int i = 0; i < N*p; i++) {
+        X[i] = rand() % 10 - 5;
+    }
 }
 
 /*!  Get the number of Chebyshev nodes in one direction;*/
@@ -57,7 +76,7 @@ public:
     virtual double kernel_Func(Point r0, Point r1){
         //implement your own kernel here
         double rSquare	=	(r0.x-r1.x)*(r0.x-r1.x) + (r0.y-r1.y)*(r0.y-r1.y);
-        return 1.0 + rSquare;
+        return exp(-pow(pow(rSquare,0.5)/900.0,0.5));
     }
 };
 
@@ -71,10 +90,17 @@ int main(){
     cout << endl << "INITIALIZING THE PROBLEM..." << endl;
 
     clock_t start   =   clock();
+    
+    /*******            Getting Meta data               ******/
+    unsigned long N;            //  Number of unknowns;
+    unsigned m;                 //  Number of measurements;
+    unsigned nMeasurementSets;  //  Number of measurement sets;
+    unsigned short p;           //  Number of terms in the structure;
+
+    get_Metadata(N, m, nMeasurementSets, p);
 
     /*******    Getting the configuration of the grid   *******/
 
-	unsigned long N;            //  Number of unknowns;
     vector<Point> location;     //  Location of the unknowns;
     
     get_Location(N,location);
@@ -84,11 +110,12 @@ int main(){
     
     /** Getting measurement related information measurements **/
     
-    unsigned m;                 //  Number of measurements;
-    unsigned nMeasurementSets;  //  Number of measurement sets;
-    MatrixXd Htranspose;        //  Transpose of the measurement operator;
-    MatrixXd measurements;      //  Actual measurements;
-    MatrixXd R;                 //  Covariance matrix;
+    double* Htranspose;         //  Transpose of the measurement operator;
+    double* measurements;       //  Actual measurements;
+    double* R;                  //  Covariance matrix;
+    Htranspose = new double[N*m];
+    measurements = new double[m*nMeasurementSets];
+    R = new double[m*m];
     
     get_Measurement_Operator(N, m, nMeasurementSets, Htranspose, measurements, R);
     
@@ -97,9 +124,8 @@ int main(){
 
     /***************    Getting the structure   ***************/
     
-    MatrixXd X;                 //  Structure of the mean;
-    unsigned short p;           //  Number of terms in the structure;
-    
+    double* X;                 //  Structure of the mean;
+    X = new double[N*p];
     get_X(N, p, X);
 
     cout << endl << "Number of terms in the structure is: " << p << endl;
@@ -128,7 +154,7 @@ int main(){
     cout << endl << "PERFORMING FAST LINEAR INVERSION..." << endl;
     
     start   =   clock();
-    H2_2D_Tree Atree(nChebNode, Htranspose, location);// Build the fmm tree;
+    H2_2D_Tree Atree(nChebNode, Htranspose, location, N, m);// Build the fmm tree;
     /* Options of kernel:
      LOGARITHM:          kernel_Logarithm
      ONEOVERR2:          kernel_OneOverR2
@@ -137,22 +163,27 @@ int main(){
      INVERSEQUADRIC:     kernel_InverseQuadric
      THINPLATESPLINE:    kernel_ThinPlateSpline
      */
-    
-    FLIPACK<myKernel> A(Htranspose, X, measurements, R, &Atree);
-    
-    A.get_Solution();
+    FLIPACK<myKernel> A(Htranspose, X, measurements, R, N, m, p, nMeasurementSets, &Atree);
+        
+    A.compute_Solution();
     
     end   =   clock();
     
     /****     If you want to use more than one kernels    ****/
+
+    /*FLIPACK<kernel_Gaussian> C(Htranspose, X, measurements, R, N, m, p, nMeasurementSets, &Atree);
     
-    /*FLIPACK<kernel_Logarithm> C(Htranspose, X, measurements, R, &Atree);
-    
-    C.get_Solution();*/
+    C.compute_Solution();*/
     
     double timeFastMethod =   double(end-start)/double(CLOCKS_PER_SEC);
 
     cout << endl << "Time taken for the fast method is: " << timeFastMethod << endl;
+    
+    /****           write data into binary file          ****/
+    double* solution;
+    A.get_Solution(solution);
+    string outputfilename = "../output/result.bin";
+    write_Into_Binary_File(outputfilename, solution, N*nMeasurementSets);
 
     /**********************************************************/
     /*                                                        */
@@ -166,31 +197,47 @@ int main(){
     
     MatrixXd Q;
     
-    myKernel B; // Make sure the type of B here
-                // corresponds to the kernel used
-                // to generate Q.
+    kernel_Gaussian B; // Make sure the type of B here
+                       // corresponds to the kernel used
+                       // to generate Q.
     
     B.kernel_2D(N, location, N, location, Q);
     
+    MatrixXd Htranspose_    =  Map<MatrixXd>(Htranspose, N, m);
+    MatrixXd R_             =  Map<MatrixXd>(R, m, m);
+    MatrixXd X_             =  Map<MatrixXd>(X, N, p);
+    MatrixXd measurements_  =  Map<MatrixXd>(measurements, m, nMeasurementSets);
+    
+    
+    
     MatrixXd temp(m+p,m+p);
-    temp.block(0,0,m,m) =   Htranspose.transpose()*Q*Htranspose+R;
-    temp.block(0,m,m,p) =   Htranspose.transpose()*X;
-    temp.block(m,0,p,m) =   X.transpose()*Htranspose;
+    temp.block(0,0,m,m) =   Htranspose_.transpose()*Q*Htranspose_+R_;
+    temp.block(0,m,m,p) =   Htranspose_.transpose()*X_;
+    temp.block(m,0,p,m) =   X_.transpose()*Htranspose_;
     temp.block(m,m,p,p) =   MatrixXd::Zero(p,p);
     
-
+    
     MatrixXd temprhs(m+p,nMeasurementSets);
-    temprhs.block(0,0,m,nMeasurementSets)   =   measurements;
+    temprhs.block(0,0,m,nMeasurementSets)   =   measurements_;
     temprhs.block(m,0,p,nMeasurementSets)   =   MatrixXd::Zero(p,nMeasurementSets);
     MatrixXd tempSolution   =   temp.fullPivLu().solve(temprhs);
-
-    MatrixXd finalSolution  =   X*tempSolution.block(m,0,p,nMeasurementSets)+Q*Htranspose*tempSolution.block(0,0,m,nMeasurementSets);
-
+    
+    MatrixXd finalSolution  =   X_*tempSolution.block(m,0,p,nMeasurementSets)+Q*Htranspose_*tempSolution.block(0,0,m,nMeasurementSets);
+    
     end   =   clock();
     
     double  timeExactMethod    =   double(end-start)/double(CLOCKS_PER_SEC);
     
+    MatrixXd solution_ =   Map<MatrixXd>(solution, N, nMeasurementSets);
+    
     cout << endl << "Time taken for the exact method is: " << timeExactMethod << endl;
     
-    cout << endl << "Relative difference between the fast and conventional solution is: " << (finalSolution-A.Solution).norm()/finalSolution.norm() << endl << endl;
+    cout << endl << "Relative difference between the fast and conventional solution is: " << (finalSolution-solution_).norm()/finalSolution.norm() << endl << endl;
+    
+    /*******        Clean Up        *******/
+
+    delete [] Htranspose;
+    delete [] measurements;
+    delete [] R;
+    delete [] X;
 }
