@@ -16,7 +16,41 @@ Date: July 26th, 2013
 ###1. INTRODUCTION
 FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from O(N^2) to O(N) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a  <img src="http://latex.codecogs.com/svg.latex? $\mathcal{H}^2$ " border="0"/> matrix. Matrix-vector products for hierarchical matrices are accelerated using the <a href="https://github.com/sivaramambikasaran/BBFMM2D">Black Box Fast Multipole Method</a> to accelerate these matrix-vector products.
 
-###2.DIRECTORIES AND FILES:
+
+###2. LINEAR MODEL
+####2.1 Prior
+Consider that s(x) is a function to be estimated, The basic model of the function to be estimated is taken as:   
+<img src="http://latex.codecogs.com/svg.latex? $s(x) = \sum_{k=1}^p f_k(x)\beta_k + \epsilon(x)$ " border="0"/>   
+The first term is the prior mean, where <img src="http://latex.codecogs.com/svg.latex? $f_k(x)$ " border="0"/>  are known functions, typically step functions, polynomials, and <img src="http://latex.codecogs.com/svg.latex? $\beta(k)$ " border="0"/>  are unknown coefficients where k = 1,2,...,p. The second term is a random function with zero mean and characterized through a covariance function. After discretization, s(x) is represented through an m by 1 vector s. The mean of s is <img src="http://latex.codecogs.com/svg.latex? $E[s] = X \beta$ " border="0"/>. where X is a known m x p matrix, and <img src="http://latex.codecogs.com/svg.latex? $\beta$ " border="0"/> are p unknown drift coefficients. The covariance of s is <img src="http://latex.codecogs.com/svg.latex? $E[(s-\mu)(s-\mu)^T] = Q$ " border="0"/>.  
+
+####2.2 Measurement equation
+The observation/measurement is related to the unknown by the linear relation  
+<img src="http://latex.codecogs.com/svg.latex? $y = Hs+v$ " border="0"/>  
+where H is n by m given matrix; v is a random vector of observation error, independent from s, with mean zero and covariance matrix R. Then, the prior statistics of y are:  
+
+The mean:  
+<img src="http://latex.codecogs.com/svg.latex? $\mu_y = E[Hs + v] = HE[s]+E[v]=HX\beta = \Phi \beta$ " border="0"/>   
+The covariance:  
+<img src="http://latex.codecogs.com/svg.latex? $\Psi = E[(H(s-X\beta)+v)(H(s-X\beta)+v)^T] = HQH^T$ " border="0"/>  
+The y to s corss-covariance:  
+<img src="http://latex.codecogs.com/svg.latex? $C_{ys} = E[(H(s-X\beta)+v)(s-X\beta)^T] = HQ$ " border="0"/>
+####2.3 The ξ Form 
+Introduce the n × 1 vector <img src="http://latex.codecogs.com/svg.latex? $\xi$ " border="0"/> defined through  <img src="http://latex.codecogs.com/svg.latex? $y-HX\beta = \Psi \xi$ " border="0"/>, here <img src="http://latex.codecogs.com/svg.latex? $\xi$ " border="0"/> is the correction term.  Then we have   
+<img src="http://latex.codecogs.com/svg.latex? $s = X\beta + QH^T\xi$ " border="0"/>
+To obtain the solution we just need to solve this equations:  
+<img src="http://latex.codecogs.com/svg.latex? $\begin{pmatrix}
+ \Psi & \Phi \\ 
+\Phi^T & 0
+ \end{pmatrix} \begin{pmatrix}
+ \xi  \\ 
+\beta
+ \end{pmatrix} = \begin{pmatrix}
+ y \\ 
+0
+ \end{pmatrix}$ " border="0"/>
+ 
+ More information can be found at <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>.
+###3. DIRECTORIES AND FILES:
 
 	./examples/		:	Example input C++ codes; Needed to read input from user or from input file.
 	./src/			:	Source code in C++
@@ -27,10 +61,10 @@ FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion a
 	./License.md	:	License file
 	./Makefile		:	Makefile  
 
-###3. TUTORIAL
-####3.1 To Get Started
+###4. TUTORIAL
+####4.1 To Get Started
 
-1. To run this package, you need to have **Eigen** and **BBFMM2D**.
+1. To run this package, you need to have <a href="http://eigen.tuxfamily.org/index.php?title=Main_Page">**Eigen**</a> and <a href="https://github.com/sivaramambikasaran/BBFMM2D">**BBFMM2D**</a>.
     * Set Eigen:
       
 	    1). Download Eigen from here: <http://eigen.tuxfamily.org/index.php?title=Main_Page> 
@@ -50,9 +84,9 @@ FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion a
 		cd exec/
 		./FLIPACK_binary_file_mykernel
 		
-####3.2 Basic usage
+####4.2 Basic usage
 
-#####3.2.1 FLIPACK with standard kernel
+#####4.2.1 FLIPACK with standard kernel
 
 The basic usage of FLIPACK with standard kernel is as follows: 
 
@@ -101,7 +135,8 @@ Once you have built the FMM tree, you can solve the linear inversion problem wit
     A.get_Solution(solution);
      
 Here FLIPACK is a template class, and it takes 9 arguments:  
-
+(To see what these values are, you read part **2** of this document, or read <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>)
+  
 * Htranspose(double* ):  
 	A pointer to <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/> ( the transpose of the measurement operator ), elements of <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/>  is stored column-wise in an array, i.e. first column of <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/> , followed by second column of <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/> , etc. 
 * X(double* ):  
@@ -121,18 +156,18 @@ Here FLIPACK is a template class, and it takes 9 arguments:
 * &Atree(H2_2D_Tree* ):  
 	A pointer to a FMM tree.  
 
-In this example, the type of kernel we use is Gaussian kernel (kernel_Gaussian), and we have provided several standard kernels (see **3.2.2**)  
+In this example, the type of kernel we use is Gaussian kernel (kernel_Gaussian), and we have provided several standard kernels (see **4.2.2**)  
 The unknown of linear inversion problem is computed via 
 
 	double* solution;
     A.get_Solution(solution);
     
-Here `get_Solution(solution)`is a method of FLIPACK. The unknown is stored column-wise in `solution`. By calling this function we can get all members defined in class FLIPACK (see **3.2.3**)  
+Here `get_Solution(solution)`is a method of FLIPACK. The unknown is stored column-wise in `solution`. By calling this function we can get all members defined in class FLIPACK (see **4.2.3**)  
  
 
-#####3.2.2 Options of provided kernels  
+#####4.2.2 Options of provided kernels  
 We have provided several standard kernels:  
-To demonstrate the deltails of each kernel, we denote the element of the covariance matrix <img src="http://latex.codecogs.com/svg.latex?  $Q_{ij} = k(r )$ " border="0"/>, where r is the distance between point i and point j, is described by a kernel function.
+The entries of the covariance matrix are given by <img src="http://latex.codecogs.com/svg.latex?  $Q_{ij} = k(r_{ij} )$ " border="0"/>, where <img src="http://latex.codecogs.com/svg.latex?  $r_{ij}$ " border="0"/> is the distance between point i and point j. Below are the details of the kernel functions we have provided:
 
 Options of kernels:  
 
@@ -161,11 +196,11 @@ Options of kernels:
 	usage:  kernel_ThinPlateSpline  
 	kernel function: <img src="http://latex.codecogs.com/svg.latex? $k(r ) =  0.5 \times r^2 \times log(r^2 )\, (r \neq 0);\, k(r )=0\,(r=0)$." border="0"/>
     		
-If you want to define your own kernel, please see **3.2.3**.  
+If you want to define your own kernel, please see **4.2.3**.  
 
-#####3.2.3 FLIPACK with user defined kernels
+#####4.2.3 FLIPACK with user defined kernels
 
-The basic usage is almost the same as **3.2.1** except that you have to define your own routine of computing kernel. One example code is as follows: 
+The basic usage is almost the same as **4.2.1** except that you have to define your own routine of computing kernel. One example code is as follows: 
 
 	#include"FLIPACK_Header.hpp"
 	
@@ -189,7 +224,7 @@ The basic usage is almost the same as **3.2.1** except that you have to define y
     }
 You can define your own kernel inside `kernel_Func(Point r0, Point r1)`, it takes two Points as input and returns a double value ( <img src="http://latex.codecogs.com/svg.latex? $Q_{ij}$." border="0"/>  ). 	
 
-#####3.2.4 Usage of multiple kernels
+#####4.2.4 Usage of multiple kernels
 
 You can also use multiple kernels (user defined kernels and standard kernels) in one file, but make sure to have different class names. 
 e.g.  
@@ -235,13 +270,13 @@ e.g.
     ...
     }
 
-The basic usage is already domonstrated in **3.2.1** and **3.2.3**. Once you have built the FMM tree, you can use different kernels to solve the linear inversion problem without rebuilding the tree. You can choose kernel type from standard kernels given by us ( see **3.2.2** ), or you can define your own kernel ( see **3.2.3** )
+The basic usage is already domonstrated in **4.2.1** and **4.2.3**. Once you have built the FMM tree, you can use different kernels to solve the linear inversion problem without rebuilding the tree. You can choose kernel type from standard kernels given by us ( see **4.2.2** ), or you can define your own kernel ( see **4.2.3** )
 	
 
 
 ####3.3 Methods of FLIPACK
 
-The followings are methods of FLIPACK to get different values that we are interested in:  
+The followings are methods of FLIPACK to get different values that we are interested in ( see **2** ):  
 * `void get_QHtranspose(double* &QHtranspose)`:  
 	This function obtains the cross covariance, and the matrix is stored column-wise in QHtranspose.  
 * `void get_HQHtranspose(double* &HQHtranspose)`:  
@@ -258,9 +293,9 @@ The followings are methods of FLIPACK to get different values that we are intere
 	This function obtains the unknown of linear inversion problem, by calling which all the values listed above are computed, and the matrix is stored column-wise in Solution.
 	
 	
-###4. ROUTINES FOR INPUTING AND OUTPUTING DATA
+###5. ROUTINES FOR INPUTING AND OUTPUTING DATA
  
-####4.1 Reading meta data from text file
+####5.1 Reading meta data from text file
 
 We have provided several routines for reading data from text file and binary file, and writing data into binary file.	
 
@@ -276,9 +311,9 @@ For example:
 
 	3245,6,288,6
 
-####4.2 Reading from binary file  
+####5.2 Reading from binary file  
 
-#####4.2.1 Read locations and transpose of H(.bin)
+#####5.2.1 Read locations and transpose of H(.bin)
 
 	void read_Location_Charges_binary(const string& filenameLocation, unsigned long N, vector<Point>& location, const string& filenameHtranspose,unsigned m, double* Htranspose);
 
@@ -304,7 +339,7 @@ The first argument filenameLocation and the forth argument filenameHtranspose ar
 	first column of <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>, followed by second column of <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>, etc.
 
 
-#####4.2.2 Read X, R and measurents(.bin)
+#####5.2.2 Read X, R and measurents(.bin)
 
 	void read_X_R_Measurements_Binary (const string& filenameX, unsigned long N, unsigned short p,double*& X,const string& filenameR, unsigned m, double*& R,const string& filenameMeasurement, unsigned nMeasurementSets, double*& measurements);
 
@@ -312,9 +347,9 @@ X, R and measurements should be stored column-wise in seperate binary files. By 
 
 This function will store X column-wise in `X`, store R column-wise in `R`, and store measurements column-wise in `measurements`.	
 
-####4.3 Read from text file
+####5.3 Read from text file
 
-#####4.3.1 Read locations and transpose of H(.txt)
+#####5.3.1 Read locations and transpose of H(.txt)
 The prototype of function to read input from text file is:  
 
 	void read_Location_Charges (const string& filename, unsigned long N, vector<Point>& location, unsigned m, double*& charges);
@@ -337,11 +372,11 @@ For example:
 	(0.342299,-0.246828) (0.0732668,,,,,,0.0951028)  
 	(-0.984604,-0.44417) (,0.782447,-0.867924,0.485731,-0.729282,-0.481031,0.541473)  
 
-#####4.3.2 Read X, R and measurents(.txt)	
+#####5.3.2 Read X, R and measurents(.txt)	
 	
 	void read_X_R_Measurements (const string& filename, unsigned long N, unsigned short p, unsigned m, unsigned nMeasurementSets, double* X, double* R, double* measurements);
 
-The first argument is the filename of input. Other arguments are the same as **4.2.2**  
+The first argument is the filename of input. Other arguments are the same as **5.2.2**  
 
 **File format:**
 For each line, it should be a row of one of these matrices(X,R,measuremtns). And the file should start with rows of X, then rows of R, and rows of measurements(in order).  
@@ -362,14 +397,14 @@ For each line, it should be a row of one of these matrices(X,R,measuremtns). And
     	Rows of R  
     	Rows of measurements 
     	
-####4.4 Writing into binary file
+####5.4 Writing into binary file
 
 	void write_Into_Binary_File(const string& filename, double* outdata, int numOfElems);  
 	
 This first argument is the filename for your output data. The second argument is a pointer to the output data, and the last argument is the number of elements in the array of your output data.
 
-###5. EXAMPLES
-####5.1 Chage input of examples
+###6. EXAMPLES
+####6.1 Chage input of examples
 
 We have provided several examples for FLIPACK. Go to examples/, read through the files both must be self explanatory for the most part.
 You can use our examples with your own input.
@@ -434,7 +469,7 @@ You can use our examples with your own input.
     * To define your own kernel:  
       Modify `class myKernel`.      
 
-####5.2 Run examples  
+####6.2 Run examples  
 
 Here we give an example:  
 If you want to use `"FLIPACK_binary_file_standard_kernel.cpp"`
