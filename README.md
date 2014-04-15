@@ -14,40 +14,30 @@ Date: July 26th, 2013
 %% The Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not %% distributed with this file, You can obtain one at <http://mozilla.org/MPL/2.0/>.  
 
 ###1. INTRODUCTION
-FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from O(N^2) to O(N) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a  <img src="http://latex.codecogs.com/svg.latex? $\mathcal{H}^2$ " border="0"/> matrix. Matrix-vector products for hierarchical matrices are accelerated using the <a href="https://github.com/sivaramambikasaran/BBFMM2D">Black Box Fast Multipole Method</a> to accelerate these matrix-vector products.
+FLIPACK (Fast Linear Inversion PACKage) is a library for fast linear inversion as described in <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>. Stochastic linear inversion is the backbone of applied inverse methods. Stochastic inverse modeling deals with the estimation of functions from sparse data, which is a problem with a nonunique solution, with the objective to evaluate best estimates, measures of uncertainty, and sets of solutions that are consistent with the data. As finer resolutions become desirable, the computational requirements increase dramatically when using conventional algorithms. The FLIPACK reduces the computational cost from O(N^2) to O(N) by modeling the large dense convariances arising in these problems as a hierarchical matrix, more specifically as a  ![](http://latex.codecogs.com/gif.latex?%5Cmathcal%7BH%7D%5E2) matrix. Matrix-vector products for hierarchical matrices are accelerated using the <a href="https://github.com/sivaramambikasaran/BBFMM2D">Black Box Fast Multipole Method</a> to accelerate these matrix-vector products.
 
 
 ###2. LINEAR MODEL
 ####2.1 Prior
 Consider that s(x) is a function to be estimated, The basic model of the function to be estimated is taken as:   
-<img src="http://latex.codecogs.com/svg.latex? $s(x) = \sum_{k=1}^p f_k(x)\beta_k + \epsilon(x)$ " border="0"/>   
-The first term is the prior mean, where <img src="http://latex.codecogs.com/svg.latex? $f_k(x)$ " border="0"/>  are known functions, typically step functions, polynomials, and <img src="http://latex.codecogs.com/svg.latex? $\beta(k)$ " border="0"/>  are unknown coefficients where k = 1,2,...,p. The second term is a random function with zero mean and characterized through a covariance function. After discretization, s(x) is represented through an m by 1 vector s. The mean of s is <img src="http://latex.codecogs.com/svg.latex? $E[s] = X \beta$ " border="0"/>. where X is a known m x p matrix, and <img src="http://latex.codecogs.com/svg.latex? $\beta$ " border="0"/> are p unknown drift coefficients. The covariance of s is <img src="http://latex.codecogs.com/svg.latex? $E[(s-\mu)(s-\mu)^T] = Q$ " border="0"/>.  
+![](http://latex.codecogs.com/gif.latex?s%28x%29%20%3D%20%5Csum_%7Bk%3D1%7D%5Ep%20f_k%28x%29%5Cbeta_k%20&plus;%20%5Cepsilon%28x%29)  
+The first term is the prior mean, where ![](http://latex.codecogs.com/gif.latex?f_k%28x%29) are known functions, typically step functions, polynomials, and ![](http://latex.codecogs.com/gif.latex?%5Cbeta%28k%29) are unknown coefficients where k = 1,2,...,p. The second term is a random function with zero mean and characterized through a covariance function. After discretization, s(x) is represented through an m by 1 vector s. The mean of s is ![](http://latex.codecogs.com/gif.latex?E%5Bs%5D%20%3D%20X%20%5Cbeta). where X is a known m x p matrix, and ![](http://latex.codecogs.com/gif.latex?%5Cbeta) are p unknown drift coefficients. The covariance of s is ![](http://latex.codecogs.com/gif.latex?E%5B%28s-%5Cmu%29%28s-%5Cmu%29%5ET%5D%20%3D%20Q).  
 
 ####2.2 Measurement equation
 The observation/measurement is related to the unknown by the linear relation  
-<img src="http://latex.codecogs.com/svg.latex? $y = Hs+v$ " border="0"/>  
+![](http://latex.codecogs.com/gif.latex?y%20%3D%20Hs&plus;v)  
 where H is n by m given matrix; v is a random vector of observation error, independent from s, with mean zero and covariance matrix R. Then, the prior statistics of y are:  
 
 The mean:  
-<img src="http://latex.codecogs.com/svg.latex? $\mu_y = E[Hs + v] = HE[s]+E[v]=HX\beta = \Phi \beta$ " border="0"/>   
+![](http://latex.codecogs.com/gif.latex?%5Cmu_y%20%3D%20E%5BHs%20&plus;%20v%5D%20%3D%20HE%5Bs%5D&plus;E%5Bv%5D%3DHX%5Cbeta%20%3D%20%5CPhi%20%5Cbeta)  
 The covariance:  
-<img src="http://latex.codecogs.com/svg.latex? $\Psi = E[(H(s-X\beta)+v)(H(s-X\beta)+v)^T] = HQH^T$ " border="0"/>  
+![](http://latex.codecogs.com/gif.latex?%5CPsi%20%3D%20E%5B%28H%28s-X%5Cbeta%29&plus;v%29%28H%28s-X%5Cbeta%29&plus;v%29%5ET%5D%20%3D%20HQH%5ET)
 The y to s corss-covariance:  
-<img src="http://latex.codecogs.com/svg.latex? $C_{ys} = E[(H(s-X\beta)+v)(s-X\beta)^T] = HQ$ " border="0"/>
+![](http://latex.codecogs.com/gif.latex?C_%7Bys%7D%20%3D%20E%5B%28H%28s-X%5Cbeta%29&plus;v%29%28s-X%5Cbeta%29%5ET%5D%20%3D%20HQ)
 ####2.3 The ξ Form 
-Introduce the n × 1 vector <img src="http://latex.codecogs.com/svg.latex? $\xi$ " border="0"/> defined through  <img src="http://latex.codecogs.com/svg.latex? $y-HX\beta = \Psi \xi$ " border="0"/>, here <img src="http://latex.codecogs.com/svg.latex? $\xi$ " border="0"/> is the correction term.  Then we have   
-<img src="http://latex.codecogs.com/svg.latex? $s = X\beta + QH^T\xi$ " border="0"/>
-To obtain the solution we just need to solve this equations:  
-<img src="http://latex.codecogs.com/svg.latex? $\begin{pmatrix}
- \Psi & \Phi \\ 
-\Phi^T & 0
- \end{pmatrix} \begin{pmatrix}
- \xi  \\ 
-\beta
- \end{pmatrix} = \begin{pmatrix}
- y \\ 
-0
- \end{pmatrix}$ " border="0"/>
+Introduce the n × 1 vector  ![](http://latex.codecogs.com/gif.latex?%5Cxi) defined through  ![](http://latex.codecogs.com/gif.latex?y-HX%5Cbeta%20%3D%20%5CPsi%20%5Cxi), here ![](http://latex.codecogs.com/gif.latex?%5Cxi) is the correction term.  Then we have   
+![](http://latex.codecogs.com/gif.latex?s%20%3D%20X%5Cbeta%20&plus;%20QH%5ET%5Cxi)To obtain the solution we just need to solve this equations:  
+![](http://latex.codecogs.com/gif.latex?%5Cbegin%7Bpmatrix%7D%20%5CPsi%20%26%20%5CPhi%20%5C%5C%20%5CPhi%5ET%20%26%200%20%5Cend%7Bpmatrix%7D%20%5Cbegin%7Bpmatrix%7D%20%5Cxi%20%5C%5C%20%5Cbeta%20%5Cend%7Bpmatrix%7D%20%3D%20%5Cbegin%7Bpmatrix%7D%20y%20%5C%5C%200%20%5Cend%7Bpmatrix%7D)
  
  More information can be found at <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>.
 ###3. DIRECTORIES AND FILES:
@@ -138,7 +128,7 @@ Here FLIPACK is a template class, and it takes 9 arguments:
 (To see what these values are, you read part **2** of this document, or read <a href="http://link.springer.com/article/10.1007/s10596-013-9364-0">this article</a>)
   
 * Htranspose(double* ):  
-	A pointer to <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/> ( the transpose of the measurement operator ), elements of <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/>  is stored column-wise in an array, i.e. first column of <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/> , followed by second column of <img src="http://latex.codecogs.com/svg.latex?  $H^T$ " border="0"/> , etc. 
+	A pointer to ![](http://latex.codecogs.com/gif.latex?H%5ET) ( the transpose of the measurement operator ), elements of ![](http://latex.codecogs.com/gif.latex?H%5ET)   is stored column-wise in an array, i.e. first column of ![](http://latex.codecogs.com/gif.latex?H%5ET)  , followed by second column of ![](http://latex.codecogs.com/gif.latex?H%5ET)  , etc. 
 * X(double* ):  
 	A pointer to X ( structure of the mean ), elements of X is stored column-wise.  
 * measurements(double* ):  
@@ -167,41 +157,38 @@ Here `get_Solution(solution)`is a method of FLIPACK. The unknown is stored colum
 
 #####4.2.2 Options of provided kernels  
 We have provided several standard kernels:  
-The entries of the covariance matrix are given by <img src="http://latex.codecogs.com/svg.latex?  $Q_{ij} = k(x_i, y_i )$ " border="0"/>, where <img src="http://latex.codecogs.com/svg.latex?  $x_i$ " border="0"/> and <img src="http://latex.codecogs.com/svg.latex?  $y_i$ " border="0"/> denote locations of points(particles). Let  <img src="http://latex.codecogs.com/svg.latex?  $r_{ij}$ " border="0"/> be the Euclidean distance between  <img src="http://latex.codecogs.com/svg.latex?  $x_i$ " border="0"/> and <img src="http://latex.codecogs.com/svg.latex?  $y_i$ " border="0"/>.   Below are the details of the kernel functions we have provided:
+The entries of the covariance matrix are given by ![](http://latex.codecogs.com/gif.latex?Q_%7Bij%7D%20%3D%20k%28x_i%2C%20y_i%20%29), where ![](http://latex.codecogs.com/gif.latex?x_i) and ![](http://latex.codecogs.com/gif.latex?y_j) denote locations of points(particles). Let  ![](http://latex.codecogs.com/gif.latex?r_%7Bij%7D) be the Euclidean distance between  ![](http://latex.codecogs.com/gif.latex?x_i) and ![](http://latex.codecogs.com/gif.latex?y_j)   Below are the details of the kernel functions we have provided:
 
 Options of kernels:  
 
 * LOGARITHM kernel:           
 	usage: kernel_Logarithm  
 	kernel function:  
-    <img src="http://latex.codecogs.com/svg.latex?  $k(x,y) = 0.5 \times log(r^2)\, (r\neq 0);\, k(x,y)= 0 \,(r=0).$ " border="0"/> 
+    ![](http://latex.codecogs.com/gif.latex?K%28x%2Cy%29%20%3D%200.5%20%5Clog%28r%5E2%29%5C%2C%20%28r%5Cneq%200%29%3B%5C%2C%20K%28x%2Cy%29%3D%200%20%5C%2C%28r%3D0%29.)
 	
 	
 * ONEOVERR2 kernel:  
-	usage: kernel_OneOverR  
+	usage: kernel_OneOverR2  
 	kernel function:  
-    <img src="http://latex.codecogs.com/svg.latex?  $k(x,y) = 1 / r^2 \,(r \neq 0);\, k(x,y)= 0 \,(r=0)$." border="0"/>   
+    ![](http://latex.codecogs.com/gif.latex?K%28x%2Cy%29%20%3D%201%20/%20r%5E2%20%5C%2C%28r%20%5Cneq%200%29%3B%5C%2C%20K%28x%2Cy%29%3D%200%20%5C%2C%28r%3D0%29%24) 
 	
 * GAUSSIAN kernel:  
 	usage: kernel_Gaussian  
 	kernel function:  
-	<img src="http://latex.codecogs.com/svg.latex? $k(x,y) = exp(-r^2)$." border="0"/>   
+	![](http://latex.codecogs.com/gif.latex?K%28x%2Cy%29%20%3D%20exp%28-r%5E2%29)   
 	
 * QUADRIC kernel:  
 	usage: kernel_Quadric  
 	kernel function:  
-	 <img src="http://latex.codecogs.com/svg.latex? $ k(x,y) = 1 + r^2$." border="0"/>   
-
+	![](http://latex.codecogs.com/gif.latex?K%28x%2Cy%29%20%3D%201%20&plus;%20r%5E2)
 * INVERSEQUADRIC kernel:  
 	usage: kernel_InverseQuadric  
-	kernel function:	  
-	 <img src="http://latex.codecogs.com/svg.latex? $k(x,y) = 1 / (1+r^2)$." border="0"/> 
-	
+	kernel function:  
+	![](http://latex.codecogs.com/gif.latex?K%28x%2Cy%29%20%3D%201%20/%20%281&plus;r%5E2%29)	
 * THINPLATESPLINE kernel:  
 	usage:  kernel_ThinPlateSpline  
 	kernel function:  
-   <img src="http://latex.codecogs.com/svg.latex? $k(x,y) =  0.5 \times r^2 \times log(r^2 )\, (r \neq 0);\, k(x,y)=0\,(r=0).$" border="0"/>
-	
+	![](http://latex.codecogs.com/gif.latex?K%28x%2Cy%29%20%3D%200.5%20r%5E2%20%5Clog%28r%5E2%20%29%5C%2C%20%28r%20%5Cneq%200%29%3B%5C%2C%20K%28x%2Cy%29%3D0%5C%2C%28r%3D0%29)    	
 If you want to define your own kernel, please see **4.2.3**.  
 
 #####4.2.3 FLIPACK with user defined kernels
@@ -228,7 +215,7 @@ The basic usage is almost the same as **4.2.1** except that you have to define y
     A.get_Solution(solution);
     …
     }
-You can define your own kernel inside `kernel_Func(Point r0, Point r1)`, it takes two Points as input and returns a double value ( <img src="http://latex.codecogs.com/svg.latex? $Q_{ij}$." border="0"/>  ). 	
+You can define your own kernel inside `kernel_Func(Point r0, Point r1)`, it takes two Points as input and returns a double value (![](http://latex.codecogs.com/gif.latex?Q_%7Bij%7D) ). 	
 
 #####4.2.4 Usage of multiple kernels
 
@@ -323,7 +310,7 @@ For example:
 
 	void read_Location_Charges_binary(const string& filenameLocation, unsigned long N, vector<Point>& location, const string& filenameHtranspose,unsigned m, double* Htranspose);
 
-The first argument filenameLocation and the forth argument filenameHtranspose are binary file names for location and <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/> respectively. N is the number of unknowns and m is the number of measurements. The data of locations is stored in `location` and the data of <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>  is stored in `Htranspose` column-wise.  
+The first argument filenameLocation and the forth argument filenameHtranspose are binary file names for location and ![](http://latex.codecogs.com/gif.latex?H%5ET) respectively. N is the number of unknowns and m is the number of measurements. The data of locations is stored in `location` and the data of ![](http://latex.codecogs.com/gif.latex?H%5ET) is stored in `Htranspose` column-wise.  
 
 **File format:** 
 
@@ -338,11 +325,11 @@ The first argument filenameLocation and the forth argument filenameHtranspose ar
 		loc1.y
 		...
  
-2. Binary file for <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>: 
+2. Binary file for ![](http://latex.codecogs.com/gif.latex?H%5ET): 
 
-	Elements of <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/> is stored this way:  
+	Elements of ![](http://latex.codecogs.com/gif.latex?H%5ET) is stored this way:  
 	It should be stored column-wise, i.e.   
-	first column of <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>, followed by second column of <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>, etc.
+	first column of ![](http://latex.codecogs.com/gif.latex?H%5ET), followed by second column of ![](http://latex.codecogs.com/gif.latex?H%5ET), etc.
 
 
 #####5.2.2 Read X, R and measurents(.bin)
@@ -364,7 +351,7 @@ The first argument is the filename of your text file, the second argument N and 
 This function stores location in `location` and stores charges column-wise in `charges`.
 
 **File format:**  
-For each row, it should start with locations, and followed by a row in <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>  ( if we do <img src="http://latex.codecogs.com/svg.latex? $QH^T$" border="0"/>  multiplication, <img src="http://latex.codecogs.com/svg.latex? $H^T$" border="0"/>  is the R.H.S.). Here note that elements should be separated using ','. If some element is 0, you can leave it as empty instead of 0. If all the elements in a row is 0, nothing need to be typed after the location.(spaces are allowed)
+For each row, it should start with locations, and followed by a row in ![](http://latex.codecogs.com/gif.latex?H%5ET) ( if we do ![](http://latex.codecogs.com/gif.latex?QH%5ET) multiplication, ![](http://latex.codecogs.com/gif.latex?H%5ET) is the R.H.S.). Here note that elements should be separated using ','. If some element is 0, you can leave it as empty instead of 0. If all the elements in a row is 0, nothing need to be typed after the location.(spaces are allowed)
 
 The row should look like this:  
   
